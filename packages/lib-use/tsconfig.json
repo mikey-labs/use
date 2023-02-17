@@ -2,8 +2,12 @@
     "compilerOptions": {
         "baseUrl": ".",
         "module": "commonjs",
-        "target": "es5",
-        "sourceMap": true
+        "target": "ES2015",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "declaration": true,
+        "strict": true,
+        "moduleResolution": "Node"
     },
     "exclude": [
         "node_modules"

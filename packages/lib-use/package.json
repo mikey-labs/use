@@ -1,12 +1,15 @@
 {
   "name": "@zhengxy/lib-use",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Composition API",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "node ./build.js"
+    "build": "pnpm clear && pnpm build:bundle && pnpm build:types",
+    "clear": "rm -rf ./dist",
+    "build:types": "tsc -p ./tsconfig.json --emitDeclarationOnly",
+    "build:bundle": "node ./build.js"
   },
   "exports": {
     ".": {
@@ -36,6 +39,7 @@
   "homepage": "https://github.com/mikey-labs/lib#readme",
   "devDependencies": {
     "esbuild": "^0.17.7",
-    "prettier": "^2.8.4"
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5"
   }
 }

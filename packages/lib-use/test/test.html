@@ -8,10 +8,16 @@
 <div id="div" style="background: black;width: 300px;height: 300px">
     <div  style="background: red;width: 200px;height: 200px"></div>
 </div>
+<div  style="background: red;width: 200px;height: 200px" id="div2"></div>
+<div  style="background: red;width: 200px;height: 200px"></div>
 <script type="module">
     import {useClickOutSide} from "../dist/index.esm.mjs";
-    useClickOutSide(document.getElementById('div'),(event)=>{
-        console.log(event)
+    const element = document.getElementById('div');
+    useClickOutSide(element,(event)=>{
+        console.log(1)
+    })
+    useClickOutSide(document.getElementById('div2'),(event)=>{
+        console.log(2)
     })
 </script>
 </body>
