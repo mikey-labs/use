@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="div" style="background: black;width: 300px;height: 300px">
+    <div  style="background: red;width: 200px;height: 200px"></div>
+</div>
+<script type="module">
+    import {useClickOutSide} from "../dist/index.esm.mjs";
+    useClickOutSide(document.getElementById('div'),(event)=>{
+        console.log(event)
+    })
+</script>
+</body>
+</html>
