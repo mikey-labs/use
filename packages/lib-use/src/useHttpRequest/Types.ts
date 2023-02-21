@@ -7,13 +7,12 @@ export enum HttpMethod {
 }
 export enum RequestContentType {
     json = "application/json",
-
 }
 export type HttpHeader = {
-    "Content-Type": string;
+    "Content-Type"?: string;
     [propName: string]: any;
 };
 
-export interface RequestInterface {
+export interface IRequest {
     <T>(method: string, url: string, params: object, header?: HttpHeader): Promise<T>;
 }

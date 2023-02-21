@@ -5,14 +5,13 @@ export type UseClickOutSideOptions = {
     eventName?: string;
 };
 
-export const useClickOutSide = (
-    target: Element,
+export function useClickOutSide(
+    target: Element | null | undefined,
     listener: EventListener,
     options: UseClickOutSideOptions = {}
-): void => {
-    if (!inBrowser) {
-        return;
-    }
+): void {
+    if (!inBrowser) return;
+    if (!target) return;
     const { eventName = "click" } = options;
     const eventListener = (event: Event) => {
         if (target && !target.contains(event.target as HTMLElement)) {
@@ -33,4 +32,4 @@ export const useClickOutSide = (
         childList: true,
     });
     bindEventListener(document, eventName, eventListener);
-};
+}

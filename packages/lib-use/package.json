@@ -1,6 +1,6 @@
 {
   "name": "@zhengxy/lib-use",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Composition API",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.mjs",
@@ -8,7 +8,7 @@
   "scripts": {
     "build": "pnpm clear && pnpm build:bundle && pnpm build:types",
     "clear": "rimraf ./dist",
-    "build:types": "tsc -p ./tsconfig.json --emitDeclarationOnly",
+    "build:types": "tsc -p ./tsconfig.json",
     "build:bundle": "node ./build.js"
   },
   "exports": {

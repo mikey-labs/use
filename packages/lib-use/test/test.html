@@ -12,17 +12,21 @@
 <div  style="background: red;width: 200px;height: 200px"></div>
 <div  style="background: yellow;width: 200px;height: 200px" id="div3"></div>
 <script type="module">
-    import {useFetch,useClickOutSide} from "../dist/index.esm.mjs";
+    import {useHttpRequest,useClickOutSide} from "../dist/index.esm.mjs";
     const element = document.getElementById('div');
-    useClickOutSide(element,(event)=>{
-        console.log(1)
-    })
+        useClickOutSide(element,(event)=>{
+            console.log(1)
+        })
+
     useClickOutSide(document.getElementById('div2'),(event)=>{
         console.log(2)
     })
-    const Fetch = useFetch('https://www.17nft.com/')
+    const Fetch = useHttpRequest({
+        base:'https://www.17nft.com/',
+    })
+    // console.log(Fetch.getConfig())
     document.getElementById('div3').onclick = function (){
-        Fetch.get('v1/homebrands?q=4',{aaa:1},{}).then((res)=>{
+        Fetch.post('v1/homebrands?q=4',{aaa:1},{c:333}).then((res)=>{
             console.log(res)
         })
     }
