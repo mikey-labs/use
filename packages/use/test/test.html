@@ -11,6 +11,10 @@
 <div  style="background: red;width: 200px;height: 200px" id="div2"></div>
 <div  style="background: red;width: 200px;height: 200px"></div>
 <div  style="background: yellow;width: 200px;height: 200px" id="div3"></div>
+<script>  function fileHandler(e){
+    console.log()
+}</script>
+<input type="file" id="file" onchange="fileHandler()">
 <script type="module">
     import {useHttpRequest,useClickOutSide} from "../dist/index.esm.mjs";
     const element = document.getElementById('div');
@@ -24,9 +28,12 @@
     const Fetch = useHttpRequest({
         base:'https://www.17nft.com/',
     })
-    // console.log(Fetch.getConfig())
+
+    console.log(Fetch.getConfig())
     document.getElementById('div3').onclick = function (){
-        Fetch.post('v1/homebrands?q=4',{aaa:1},{c:333}).then((res)=>{
+            const formdata = new FormData();
+            formdata.append('file',document.getElementById('file').files[0])
+        Fetch.get('v1/homebrands?q=4',formdata,{c:333}).then((res)=>{
             console.log(res)
         })
     }
