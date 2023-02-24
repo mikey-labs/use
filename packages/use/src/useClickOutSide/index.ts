@@ -1,5 +1,6 @@
 import { inBrowser } from "../utils";
-import { bindEventListener, unbindEventListener } from "../useEventListener";
+import { observerTargetRemove } from "../useEventListener/TargetRemoveObserver";
+import { bindEventListener, unbindEventListener } from "../useEventListener/EventListener";
 
 export type UseClickOutSideOptions = {
     eventName?: string;
@@ -18,18 +19,8 @@ export function useClickOutSide(
             listener(event);
         }
     };
-    let observer: MutationObserver | null = new MutationObserver((records: MutationRecord[]) => {
-        const isRemoved: boolean = records.some((record) =>
-            Array.from(record.removedNodes).some((node) => node === target)
-        );
-        if (isRemoved) {
-            unbindEventListener(document, eventName, eventListener);
-            observer?.disconnect();
-            observer = null;
-        }
-    });
-    observer.observe((target as any).parentNode, {
-        childList: true,
+    observerTargetRemove(target, () => {
+        unbindEventListener(document, eventName, eventListener);
     });
     bindEventListener(document, eventName, eventListener);
 }

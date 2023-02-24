@@ -4,7 +4,7 @@ import { FetchConfig, HttpHeader, HttpMethod, RequestContentType } from "./Types
 
 const defaultFetchConfig: FetchConfig = {
     base: "",
-    credentials:<RequestCredentials>"same-origin",
+    credentials: <RequestCredentials>"same-origin",
     headers: {
         "Content-Type": RequestContentType.json,
     },
@@ -47,7 +47,7 @@ class HttpRequest implements IHttpRequest {
     public invoke<T>(method: string, url: string, data: object, headers?: HttpHeader): Promise<T> {
         return this.#request(method, urlSplice(url, this.#config.base), data, {
             ...this.#config,
-            headers: mergeHeader(this.#config.headers, headers),
+            headers: mergeHeader({ ...this.#config.headers }, headers),
         });
     }
     public get<T>(url: string, data: object = {}, headers?: HttpHeader): Promise<T> {
