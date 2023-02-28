@@ -49,6 +49,16 @@
     </style>
 </head>
 <body>
+<div class="block" style="--title: 'install';" >
+    <div class="note" style="font-size: 18px">浏览器直接引入：&lt;script src="pathto/dist/index/browser.js"&gt;&lt;/script&gt;</div>
+    <code class="note" style="font-size: 18px">cjs,esm:
+        npm/pnpm i @zhengxy/use;
+        yarn add @zhengxy/use;
+useAge:
+        cjs :const Tools = require('@zhengxy/use')
+        esm: import { useHttpRequest} from "@zhengxy/use";
+    </code>
+</div>
 <div class="block" style="--title: 'useClickOutside';">
     <div class="note">点击元素外部监听事件，当监听元素被移除，监听事件自动移除</div>
     <code class="note">
@@ -111,17 +121,60 @@
     <button id="b8">绑定事件</button>
 </div>
 <div class="block" style="--title: 'useWindowResize';">
-    <div class="note">resize,和移动端横竖屏切换orientationchange事件监听</div>
+    <div class="note">window resize和移动端横竖屏切换orientationchange事件监听</div>
     <code class="note">
         使用方式：
         useWindowResize(callback: (width:number,height:number)=>void)
     </code>
     当前窗口宽高：<span id="s2"></span>
 </div>
+<div class="block" style="--title: 'useEventDispatch,useEventObserver';">
+    <div class="note">封装postMessage 发送和接受消息,如和iframe通信</div>
+    <code class="note">
+        使用方式：
+        useEventDispatch(eventName:string,data:any,options?:EventOptions = {})
+        useEventObserver(eventName:string,callback:(data:any)=>void,options?:EventOptions = {})
+        EventOptions = {
+        target?:Window,
+        origin?:string
+        }
+        eventName发送的自定义事件名称，接收的eventName与发送的一致才能正常接受，data需要发送消息的对象
+        使用useEventDispatch时，target为你要发送消息的window对象，origin为接收者的origin，如果目标窗口的domain为origin才会收到此消息，默认值"*"，所有窗口都会收到消息，注：受同源策略的限制，target和origin必须在同一域名下
+        使用useEventObserver时，target为你要接收消息的window对象，origin为发送者的origin，如果发送者的origin为设置的origin才会收到此消息，默认值为空，接收所有为eventName的消息
 
+    </code>
+    <button id="b9">发送事件</button>
+    <iframe src="test1.html"  id="i1"></iframe>
+</div>
+<div class="block" style="--title: 'useFullScreen';">
+    <div class="note">封装全屏，退出全屏方法</div>
+    <code class="note">
+        使用方式：
+        useFullScreen(target:HTMLElement):any
+        useExitFullScreen():any
+        useFullScreenChange(callback:(isFullScreen:boolean,arg:IArguments)=>void):void
+    </code>
+    <div id="d1" style="background: #fff">
+        当前是否全屏:<span id="s3" ></span>
+        <button id="b10">我要全屏</button>
+        <button id="b11">我要退出全屏</button>
+    </div>
+</div>
 <script type="module">
-    import { useHttpRequest, useClickOutSide, useEventListener, usePageVisibility,useWindowResize} from "../dist/index.esm.mjs";
+    import {
+        useHttpRequest,
+        useEventDispatch,
+        useEventObserver,
+        useClickOutSide,
+        useEventListener,
+        usePageVisibility,
+        useWindowResize,
+        useFullScreen,
+        useExitFullScreen,
+        useFullScreenChange
+    } from "../dist/index.esm.mjs";
         useClickOutSide(document.getElementById('b1'),(event)=>{
+            // console.log(event)
             console.log('useClickOutside按钮1::点击外部回调')
         })
         useClickOutSide(document.getElementById('b2'),(events)=>{
@@ -179,10 +232,31 @@
         console.log('绑定事件')
     })
 
-    useWindowResize((width,height)=>{
-        console.log(width,height)
+    useWindowResize((width,height,e)=>{
+        console.log(width,height,e)
         document.getElementById('s2').textContent = width + ',' + height
     })
+
+    useEventListener(document.getElementById('b9'),'click',()=>{
+        useEventDispatch('hello',{a:'hello,你好'},{
+            target:document.getElementById('i1').contentWindow,
+            origin:location.origin
+        })
+    })
+    useEventObserver('custom',(data)=>{
+        console.log('接收子窗口消息',data)
+    })
+    useEventListener(document.getElementById('b10'),'click',()=>{
+        useFullScreen(document.getElementById('d1'))
+    })
+    useEventListener(document.getElementById('b11'),'click',()=>{
+        useExitFullScreen()
+    })
+    useFullScreenChange((isFullScreen,event)=>{
+        document.getElementById('s3').textContent = isFullScreen;
+    })
+
+
 </script>
 </body>
 </html>

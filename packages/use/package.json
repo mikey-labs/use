@@ -15,7 +15,8 @@
   "exports": {
     ".": {
       "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.cjs.js"
+      "require": "./dist/index.cjs.js",
+        "default": "./dist/index.browser.js"
     }
   },
   "files": [

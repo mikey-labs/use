@@ -6,6 +6,11 @@ export type UseClickOutSideOptions = {
     eventName?: string;
 };
 
+/**
+ * @desc 点击目标元素外部区域出发事件
+ * @param target 目标元素
+ * @param listener 监听事件
+ * */
 export function useClickOutSide(
     target: Element | null | undefined,
     listener: EventListener,

@@ -15,7 +15,6 @@ export const bindEventListener = (function (): Function {
 /* 解除事件绑定 */
 export const unbindEventListener = (function (): Function {
     return function (element: Node, event: string, handler: EventListener,options:AddEventListenerOptions | boolean = false) {
-        console.log(options)
         if (element && event) {
             if (document["removeEventListener"]) {
                 element.removeEventListener(event, handler, options);
