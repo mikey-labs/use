@@ -1,25 +1,18 @@
 import { httpCaller } from "./Request";
 import { inBrowser } from "../utils";
 import { FetchConfig, HttpHeader, HttpMethod, RequestContentType } from "./Types";
-/*默认配置*/
-const defaultFetchConfig: FetchConfig = {
-    base: "",
-    credentials: <RequestCredentials>"same-origin",
-    headers: {
-        "Content-Type": RequestContentType.json,
-    },
-};
+
 /**
  * @desc 将传入的配置与默认的配置合并
  * @param config 需要合并的配置
  * */
-const mergeConfig = (config: FetchConfig): FetchConfig => {
+const mergeConfig = (defaultConfig: FetchConfig, config: FetchConfig): FetchConfig => {
     if (!config) {
-        return defaultFetchConfig;
+        return defaultConfig;
     } else {
         const { headers } = config;
-        config.headers = Object.assign(defaultFetchConfig.headers || {}, headers);
-        return Object.assign(defaultFetchConfig, config);
+        config.headers = Object.assign(defaultConfig.headers || {}, headers);
+        return Object.assign(defaultConfig, config);
     }
 };
 /**
@@ -61,6 +54,15 @@ abstract class IHttpRequest {
 
 class HttpRequest implements IHttpRequest {
     readonly #config: FetchConfig;
+
+    /*默认配置*/
+    #defaultFetchConfig: FetchConfig = {
+        base: "",
+        credentials: <RequestCredentials>"same-origin",
+        headers: {
+            "Content-Type": RequestContentType.json,
+        },
+    };
     get #request() {
         if (inBrowser) {
             return httpCaller;
@@ -69,7 +71,7 @@ class HttpRequest implements IHttpRequest {
         }
     }
     constructor(config: FetchConfig) {
-        this.#config = mergeConfig(config);
+        this.#config = mergeConfig(this.#defaultFetchConfig, config);
     }
     public invoke<T>(method: string, url: string, data: object, headers?: HttpHeader): Promise<T> {
         return this.#request(method, urlSplice(url, this.#config.base), data, {

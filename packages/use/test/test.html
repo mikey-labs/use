@@ -95,6 +95,8 @@ useAge:
         request.delete(url: string, data: object, headers?: HttpHeader): Promise
     </code>
     <button id="b4">Get请求</button>
+    <button id="b41">Get请求图片</button>
+    <img id="i2" width="100">
     <button id="b5">Post请求</button>
     <br>
     <input type="file" id="file">
@@ -160,6 +162,17 @@ useAge:
         <button id="b11">我要退出全屏</button>
     </div>
 </div>
+<div class="block" style="--title: 'useCopy';">
+    <div class="note">封装复制文本方法</div>
+    <code class="note">
+        使用方式：
+        useCopy(text:string):Promise< boolean >
+    </code>
+    <div id="d2">我是会被复制的文本</div>
+    <div >
+        <button id="b12">复制</button>
+    </div>
+</div>
 <script type="module">
     import {
         useHttpRequest,
@@ -171,7 +184,8 @@ useAge:
         useWindowResize,
         useFullScreen,
         useExitFullScreen,
-        useFullScreenChange
+        useFullScreenChange,
+        useCopy
     } from "../dist/index.esm.mjs";
         useClickOutSide(document.getElementById('b1'),(event)=>{
             // console.log(event)
@@ -197,6 +211,15 @@ useAge:
         request.get('v1/homebrands?q=4',{a:3}).then((res)=>{
             console.log("返回数据：",res)
         })
+    })
+    useEventListener(document.getElementById('b41'),'click',(event)=>{
+        const request1 = useHttpRequest()
+        console.log(request1.getConfig())
+        request1.get('./abao.png').then((res)=>{
+            console.log("返回数据：",res)
+            document.getElementById('i2').src = URL.createObjectURL(res)
+        })
+
     })
     useEventListener(document.getElementById('b5'),'click',(event)=>{
         console.log(request.getConfig())
@@ -254,6 +277,15 @@ useAge:
     })
     useFullScreenChange((isFullScreen,event)=>{
         document.getElementById('s3').textContent = isFullScreen;
+    })
+
+    useEventListener(document.getElementById('b12'),'click',()=>{
+        useCopy(document.getElementById('d2').textContent).then(res=>{
+            console.log(res)
+
+            alert(res ? '复制成功' : '复制失败')
+
+        })
     })
 
 
