@@ -28,6 +28,6 @@ function execCommand(text:string):boolean{
  * @desc 复制文本
  * @param text 需要复制的文本
  * */
-export async function useCopy(text: string): Promise<boolean> {
+export  const useCopy = async (text: string): Promise<boolean> => {
     return inBrowser &&( await clipboardCopy(text) || execCommand(text) )
 }
