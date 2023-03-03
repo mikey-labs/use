@@ -173,6 +173,23 @@ useAge:
         <button id="b12">复制</button>
     </div>
 </div>
+<div class="block" style="--title: 'useStorage';">
+    <div class="note">封装本地存储接口，优先使用localStorage,sessionStorage,不支持则用cookie</div>
+    <code class="note">
+        使用方式：
+        useCopy(text:string):Promise< boolean >
+    </code>
+    <div>
+        <button id="b14">存储session</button>
+        <button id="b15">读取session</button>
+        <button id="b16">移除session</button>
+    </div>
+    <div>
+        <button id="b17">存储local</button>
+        <button id="b18">读取local</button>
+        <button id="b19">移除local</button>
+    </div>
+</div>
 <script type="module">
     import {
         useHttpRequest,
@@ -185,7 +202,7 @@ useAge:
         useFullScreen,
         useExitFullScreen,
         useFullScreenChange,
-        useCopy
+        useCopy, useStorage
     } from "../dist/index.esm.mjs";
         useClickOutSide(document.getElementById('b1'),(event)=>{
             // console.log(event)
@@ -282,10 +299,29 @@ useAge:
     useEventListener(document.getElementById('b12'),'click',()=>{
         useCopy(document.getElementById('d2').textContent).then(res=>{
             console.log(res)
-
             alert(res ? '复制成功' : '复制失败')
-
         })
+    })
+
+    const Storage = useStorage();
+    useEventListener(document.getElementById('b14'),'click',()=>{
+        console.log(Storage.setSession('session',{key:'session'}))
+    })
+    useEventListener(document.getElementById('b15'),'click',()=>{
+        console.log(Storage.getSession('session'))
+    })
+    useEventListener(document.getElementById('b16'),'click',()=>{
+        console.log(Storage.removeSession('session'))
+    })
+
+    useEventListener(document.getElementById('b17'),'click',()=>{
+        console.log(Storage.setLocal('local',{key:'local'}))
+    })
+    useEventListener(document.getElementById('b18'),'click',()=>{
+        console.log(Storage.getLocal('local'))
+    })
+    useEventListener(document.getElementById('b10'),'click',()=>{
+        console.log(Storage.removeLocal('local'))
     })
 
 
