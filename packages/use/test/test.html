@@ -177,7 +177,15 @@ useAge:
     <div class="note">封装本地存储接口，优先使用localStorage,sessionStorage,不支持则用cookie</div>
     <code class="note">
         使用方式：
-        useCopy(text:string):Promise< boolean >
+        const Storage = useStorage({use:'cookie'});//use type = 'auto' | 'cookie' | 'storage'
+        useEventListener(document.getElementById('b14'),'click',()=>{
+        Storage.setSession('session',{a:1})
+        Storage.getSession('session')
+        Storage.getLocal('session')
+        Storage.setLocal('session',{a:1})
+        Storage.removeLocal('session')
+        Storage.removeSession('session')
+        })
     </code>
     <div>
         <button id="b14">存储session</button>
@@ -303,12 +311,14 @@ useAge:
         })
     })
 
-    const Storage = useStorage();
+    const Storage = useStorage({use:'cookie'});
     useEventListener(document.getElementById('b14'),'click',()=>{
-        console.log(Storage.setSession('session',{key:'session'}))
+        console.log(Storage.setSession('session',''))
     })
     useEventListener(document.getElementById('b15'),'click',()=>{
+        console.log(useStorage().getSession('session'))
         console.log(Storage.getSession('session'))
+
     })
     useEventListener(document.getElementById('b16'),'click',()=>{
         console.log(Storage.removeSession('session'))
@@ -320,7 +330,7 @@ useAge:
     useEventListener(document.getElementById('b18'),'click',()=>{
         console.log(Storage.getLocal('local'))
     })
-    useEventListener(document.getElementById('b10'),'click',()=>{
+    useEventListener(document.getElementById('b19'),'click',()=>{
         console.log(Storage.removeLocal('local'))
     })
 

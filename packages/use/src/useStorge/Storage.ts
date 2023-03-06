@@ -1,6 +1,6 @@
 import { IStorage } from "./Types";
 
-const formatResult = (value:string | null):any=>{
+export const formatResult = (value:string | null):any=>{
     if(value === 'undefined')return undefined;
     if(value === null)return null;
     return JSON.parse(value);

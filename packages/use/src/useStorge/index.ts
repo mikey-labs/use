@@ -2,9 +2,9 @@ import { isSupportStorage } from "../utils";
 import { IStorage } from "./Types";
 import { NativeStorage } from "./Storage";
 import { Cookie } from "./Cookie";
-
+export type UseType = 'auto' | 'storage' | 'cookie'
 export type StorageOption = {
-
+    use?:UseType
 }
 class DataStorage implements IStorage{
     #config:StorageOption = {}
@@ -30,7 +30,7 @@ class DataStorage implements IStorage{
         return this.Storage.removeLocal(key);
     }
     get Storage(){
-        return isSupportStorage ? NativeStorage : Cookie
+        return this.#config?.use === 'cookie' || !isSupportStorage ? Cookie : NativeStorage
     }
 
 }
