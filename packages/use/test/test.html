@@ -178,14 +178,12 @@ useAge:
     <code class="note">
         使用方式：
         const Storage = useStorage({use:'cookie'});//use type = 'auto' | 'cookie' | 'storage'
-        useEventListener(document.getElementById('b14'),'click',()=>{
         Storage.setSession('session',{a:1})
         Storage.getSession('session')
         Storage.getLocal('session')
         Storage.setLocal('session',{a:1})
         Storage.removeLocal('session')
         Storage.removeSession('session')
-        })
     </code>
     <div>
         <button id="b14">存储session</button>
