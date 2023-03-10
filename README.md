@@ -51,10 +51,6 @@ Using iife
 </script>
 ```
 
-## Browser Support
-
-Support all modern browsers
-
 ## Usage(example by ESM)
 
 #### useEventListener
@@ -208,6 +204,9 @@ Storage.removeLocal('session')
 Storage.removeSession('session')
 ```
 
+## Browser Support
+
+Support all modern browsers
 
 ## LICENSE
 
