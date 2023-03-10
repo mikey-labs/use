@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+        .block{
+            font-size: 14px;
+            color: #666;
+            border: 1px solid #ececec;
+            border-radius: 4px;
+            position: relative;
+            --title:'';
+            padding: 20px;
+            margin-bottom: 50px;
+        }
+        .block:after{
+            position: absolute;
+            top: -12px;
+            background: #fff;
+            padding: 0 10px;
+            height: 20px;
+            left: 20px;
+            font-weight: bold;
+            z-index: 1;
+            content: var(--title);
+        }
+        .block > * {
+            margin-top: 10px;
+        }
+        button{
+            border: 1px solid #eaeaea;
+            border-radius: 4px;
+            background: #fff;
+            padding: 8px 15px;
+            outline: none;
+            cursor: pointer;
+            color: #333;
+        }
+        button:hover{
+            background: rgba(100,100,100,.1);
+        }
+        .note{color: chocolate;font-size: 12px;padding: 5px 0;display: block;white-space: pre-wrap}
+    </style>
+</head>
+<body>
+<div class="block" style="--title: 'install';" >
+    <div class="note" style="font-size: 18px">浏览器直接引入：&lt;script src="pathto/dist/index/browser.js"&gt;&lt;/script&gt;</div>
+    <code class="note" style="font-size: 18px">cjs,esm:
+        npm/pnpm i @zhengxy/use;
+        yarn add @zhengxy/use;
+useAge:
+        cjs :const Tools = require('@zhengxy/use')
+        esm: import { useHttpRequest} from "@zhengxy/use";
+    </code>
+</div>
+<div class="block" style="--title: 'useClickOutside';">
+    <div class="note">点击元素外部监听事件，当监听元素被移除，监听事件自动移除</div>
+    <code class="note">
+        使用方式：
+        useClickOutSide(
+            target: Element | null | undefined,
+            listener: EventListener,
+            options: UseClickOutSideOptions = {}
+        ): void
+    </code>
+    <button id="b1">useClickOutside按钮1</button>
+    <button id="b2">useClickOutside按钮2</button>
+    <button id="b3">移除useClickOutside按钮1，并自动移除useClickOutside监听事件</button>
+</div>
+
+<div class="block" style="--title: 'useHttpRequest';">
+    <div class="note">简单封装Fetch 和 XMLHttpRequest 请求,如果不支持Fetch api 使用XMLHttpRequest，Delete,Put 逻辑与Post 一致</div>
+    <div class="note">提供默认支持Get，Post，Put，Delete，如有其他方式直接调用invoke方法</div>
+    <code class="note">
+        默认配置：
+        {
+            base:'',//默认api host
+            credentials:"include" | "omit" | "same-origin"('default'),
+            headers:HttpHeaders
+        }
+        getConfig():获取默认配置
+        const request = useHttpRequest({
+            credentials:'omit',//RequestCredentials 对象
+            base:'https://www.17nft.com/',
+        })
+        request.get(url: string, data: object, headers?: HttpHeader): Promise
+        request.post(url: string, data: object, headers?: HttpHeader): Promise
+        request.put(url: string, data: object, headers?: HttpHeader): Promise
+        request.delete(url: string, data: object, headers?: HttpHeader): Promise
+    </code>
+    <button id="b4">Get请求</button>
+    <button id="b41">Get请求图片</button>
+    <img id="i2" width="100">
+    <button id="b5">Post请求</button>
+    <br>
+    <input type="file" id="file">
+    <button id="b6">FormData请求</button>
+
+</div>
+
+<div class="block" style="--title: 'usePageVisibility';">
+    <div class="note">基于document.visibilityState，当前网页是否显示在前台,如果进入页面就需要显示状态，手动调用document.visibilityState获取</div>
+    <code class="note">
+        使用方式：
+        usePageVisibility(callback: (visibility: string) => void): void
+    </code>
+    当前网页是否显示在前台：<span id="s1"></span>
+</div>
+
+<div class="block" style="--title: 'useEventListener，useOnceEventListener';">
+    <div class="note">useEventListener添加元素监听事件，当元素被移除时候自动移除监听</div>
+    <code class="note">
+        使用方式：
+        useEventListener(el: Node, event: string, callback: Function, options?:AddEventListenerOptions)
+    </code>
+    <button id="b7">监听一次</button>
+    <button id="b8">绑定事件</button>
+</div>
+<div class="block" style="--title: 'useWindowResize';">
+    <div class="note">window resize和移动端横竖屏切换orientationchange事件监听</div>
+    <code class="note">
+        使用方式：
+        useWindowResize(callback: (width:number,height:number)=>void)
+    </code>
+    当前窗口宽高：<span id="s2"></span>
+</div>
+<div class="block" style="--title: 'useEventDispatch,useEventObserver';">
+    <div class="note">封装postMessage 发送和接受消息,如和iframe通信</div>
+    <code class="note">
+        使用方式：
+        useEventDispatch(eventName:string,data:any,options?:EventOptions = {})
+        useEventObserver(eventName:string,callback:(data:any)=>void,options?:EventOptions = {})
+        EventOptions = {
+        target?:Window,
+        origin?:string
+        }
+        eventName发送的自定义事件名称，接收的eventName与发送的一致才能正常接受，data需要发送消息的对象
+        使用useEventDispatch时，target为你要发送消息的window对象，origin为接收者的origin，如果目标窗口的domain为origin才会收到此消息，默认值"*"，所有窗口都会收到消息，注：受同源策略的限制，target和origin必须在同一域名下
+        使用useEventObserver时，target为你要接收消息的window对象，origin为发送者的origin，如果发送者的origin为设置的origin才会收到此消息，默认值为空，接收所有为eventName的消息
+
+    </code>
+    <button id="b9">发送事件</button>
+    <iframe src="test1.html"  id="i1"></iframe>
+</div>
+<div class="block" style="--title: 'useFullScreen';">
+    <div class="note">封装全屏，退出全屏方法</div>
+    <code class="note">
+        使用方式：
+        useFullScreen(target:HTMLElement):any
+        useExitFullScreen():any
+        useFullScreenChange(callback:(isFullScreen:boolean,arg:IArguments)=>void):void
+    </code>
+    <div id="d1" style="background: #fff">
+        当前是否全屏:<span id="s3" ></span>
+        <button id="b10">我要全屏</button>
+        <button id="b11">我要退出全屏</button>
+    </div>
+</div>
+<div class="block" style="--title: 'useCopy';">
+    <div class="note">封装复制文本方法</div>
+    <code class="note">
+        使用方式：
+        useCopy(text:string):Promise< boolean >
+    </code>
+    <div id="d2">我是会被复制的文本</div>
+    <div >
+        <button id="b12">复制</button>
+    </div>
+</div>
+<div class="block" style="--title: 'useStorage';">
+    <div class="note">封装本地存储接口，优先使用localStorage,sessionStorage,不支持则用cookie</div>
+    <code class="note">
+        使用方式：
+        const Storage = useStorage({use:'cookie'});//use type = 'auto' | 'cookie' | 'storage'
+        Storage.setSession('session',{a:1})
+        Storage.getSession('session')
+        Storage.getLocal('session')
+        Storage.setLocal('session',{a:1})
+        Storage.removeLocal('session')
+        Storage.removeSession('session')
+    </code>
+    <div>
+        <button id="b14">存储session</button>
+        <button id="b15">读取session</button>
+        <button id="b16">移除session</button>
+    </div>
+    <div>
+        <button id="b17">存储local</button>
+        <button id="b18">读取local</button>
+        <button id="b19">移除local</button>
+    </div>
+</div>
+<script type="module">
+    import {
+        useHttpRequest,
+        useEventDispatch,
+        useEventObserver,
+        useClickOutSide,
+        useEventListener,
+        usePageVisibility,
+        useWindowResize,
+        useFullScreen,
+        useExitFullScreen,
+        useFullScreenChange,
+        useCopy, useStorage
+    } from "../dist/index.esm.mjs";
+        useClickOutSide(document.getElementById('b1'),(event)=>{
+            // console.log(event)
+            console.log('useClickOutside按钮1::点击外部回调')
+        })
+        useClickOutSide(document.getElementById('b2'),(events)=>{
+            console.log('useClickOutside按钮2::点击外部回调')
+        })
+        useEventListener(document.getElementById('b3'),'click',()=>{
+            const b1 = document.getElementById('b1');
+            if(b1){
+                b1.parentNode.removeChild(b1)
+            }
+        })
+
+    const request = useHttpRequest({
+        credentials:'omit',//RequestCredentials 对象
+        base:'https://www.17nft.com/',
+    })
+
+    useEventListener(document.getElementById('b4'),'click',(event)=>{
+        console.log(request.getConfig())
+        request.get('v1/homebrands?q=4',{a:3}).then((res)=>{
+            console.log("返回数据：",res)
+        })
+    })
+    useEventListener(document.getElementById('b41'),'click',(event)=>{
+        const request1 = useHttpRequest()
+        console.log(request1.getConfig())
+        request1.get('./abao.png').then((res)=>{
+            console.log("返回数据：",res)
+            document.getElementById('i2').src = URL.createObjectURL(res)
+        })
+
+    })
+    useEventListener(document.getElementById('b5'),'click',(event)=>{
+        console.log(request.getConfig())
+        request.post('v1/homebrands?q=4',{a:3}).then((res)=>{
+            console.log("返回数据：",res)
+        })
+    })
+    useEventListener(document.getElementById('b6'),'click',(event)=>{
+        if(document.getElementById('file').files[0]){
+            const formdata = new FormData();
+            formdata.append('file',document.getElementById('file').files[0])
+            //单个请求不会改变base默认配置
+            request.post('v1/homebrands?q=4',formdata,{'Content-Type':'multipart/form-data'}).then((res)=>{
+                console.log(request.getConfig())
+                console.log("返回数据：",res)
+            })
+        } else {
+            alert('请选择文件')
+        }
+    })
+
+    document.getElementById('s1').textContent = document.visibilityState
+    usePageVisibility((state)=>{
+        console.log('visibilityState:',state)
+        document.getElementById('s1').textContent = state
+    })
+
+    useEventListener(document.getElementById('b7'),'click',()=>{
+        console.log('监听一次')
+    },{once:true})
+    useEventListener(document.getElementById('b8'),'click',(e)=>{
+        e.stopPropagation()
+        console.log('绑定事件')
+    })
+
+    useWindowResize((width,height,e)=>{
+        console.log(width,height,e)
+        document.getElementById('s2').textContent = width + ',' + height
+    })
+
+    useEventListener(document.getElementById('b9'),'click',()=>{
+        useEventDispatch('hello',{a:'hello,你好'},{
+            target:document.getElementById('i1').contentWindow,
+            origin:location.origin
+        })
+    })
+    useEventObserver('custom',(data)=>{
+        console.log('接收子窗口消息',data)
+    })
+    useEventListener(document.getElementById('b10'),'click',()=>{
+        useFullScreen(document.getElementById('d1'))
+    })
+    useEventListener(document.getElementById('b11'),'click',()=>{
+        useExitFullScreen()
+    })
+    useFullScreenChange((isFullScreen,event)=>{
+        document.getElementById('s3').textContent = isFullScreen;
+    })
+
+    useEventListener(document.getElementById('b12'),'click',()=>{
+        useCopy(document.getElementById('d2').textContent).then(res=>{
+            console.log(res)
+            alert(res ? '复制成功' : '复制失败')
+        })
+    })
+
+    const Storage = useStorage({use:'cookie'});
+    useEventListener(document.getElementById('b14'),'click',()=>{
+        console.log(Storage.setSession('session',''))
+    })
+    useEventListener(document.getElementById('b15'),'click',()=>{
+        console.log(useStorage().getSession('session'))
+        console.log(Storage.getSession('session'))
+
+    })
+    useEventListener(document.getElementById('b16'),'click',()=>{
+        console.log(Storage.removeSession('session'))
+    })
+
+    useEventListener(document.getElementById('b17'),'click',()=>{
+        console.log(Storage.setLocal('local',{key:'local'}))
+    })
+    useEventListener(document.getElementById('b18'),'click',()=>{
+        console.log(Storage.getLocal('local'))
+    })
+    useEventListener(document.getElementById('b19'),'click',()=>{
+        console.log(Storage.removeLocal('local'))
+    })
+
+
+</script>
+</body>
+</html>
