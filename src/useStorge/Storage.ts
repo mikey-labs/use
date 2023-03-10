@@ -1,10 +1,17 @@
 import { IStorage } from "./Types";
 
+/**
+ * @desc 将结果转换成对应的类型
+ * @param value
+ */
 export const formatResult = (value:string | null):any=>{
     if(value === 'undefined')return undefined;
     if(value === null)return null;
     return JSON.parse(value);
 }
+/**
+ * @desc NativeStorage 实现类，继承于IStorage
+ */
 export const NativeStorage:IStorage = {
     getLocal(key: string): any {
         return formatResult(localStorage.getItem(key));

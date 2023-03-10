@@ -79,9 +79,10 @@ useAge:
     <div class="note">提供默认支持Get，Post，Put，Delete，如有其他方式直接调用invoke方法</div>
     <code class="note">
         默认配置：
-        {
+        FetchConfig = {
             base:'',//默认api host
             credentials:"include" | "omit" | "same-origin"('default'),
+            responseType: "" | "arraybuffer" | "blob" | "document" | "json" | "text", //指定返回类型，仅当使用xmlhttprequest请求方式的时候使用
             headers:HttpHeaders
         }
         getConfig():获取默认配置
@@ -89,10 +90,11 @@ useAge:
             credentials:'omit',//RequestCredentials 对象
             base:'https://www.17nft.com/',
         })
-        request.get(url: string, data: object, headers?: HttpHeader): Promise
-        request.post(url: string, data: object, headers?: HttpHeader): Promise
-        request.put(url: string, data: object, headers?: HttpHeader): Promise
-        request.delete(url: string, data: object, headers?: HttpHeader): Promise
+
+        request.get(url: string, data: object, config?: FetchConfig): Promise
+        request.post(url: string, data: object, config?: FetchConfig): Promise
+        request.put(url: string, data: object, config?: FetchConfig): Promise
+        request.delete(url: string, data: object, config?: FetchConfig): Promise
     </code>
     <button id="b4">Get请求</button>
     <button id="b41">Get请求图片</button>
@@ -195,8 +197,48 @@ useAge:
         <button id="b18">读取local</button>
         <button id="b19">移除local</button>
     </div>
+
+</div>
+
+<div class="block" style="--title: 'useDownload';">
+    <div class="note">保存文件到本地，支持url，本地Blob对象,以及异步获取的二进制流</div>
+    <code class="note">
+        使用方式：
+        export declare function useDownload(target: string | Blob, fileName: string): Promise< boolean >;
+    </code>
+    <div>
+        <button id="b20">下载图片（同域名下）</button>
+        <button id="b21">下载生成的Blob</button>
+        <canvas width="100" height="100" id="c1"></canvas>
+        <button id="b22">下载Canvas</button>
+        <button id="b23">异步下载图片</button>
+    </div>
+</div>
+
+<div class="block" style="--title: 'useKeyboard';">
+    <div class="note">监听键盘事件，支持组合键，如ctrl+c,指定ctrl为true，注意：特殊符号比如“?”需要开启shift，因为打出"?"需要按shift按键</div>
+    <code class="note">
+        使用方式：
+        export type PressTypes = 'keydown' | 'keyup';
+        export type KeyboardOptions = {
+        key: string;
+        type?: PressTypes;
+        caseSensitive?: boolean;
+        once?: boolean;
+        ctrl?: boolean;
+        shift?: boolean;
+        alt?: boolean;
+        meta?: boolean;
+        };
+        export declare function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void): void;
+    </code>
+    <div>
+        <button id="b24">监听q键</button>
+        <button id="b25">监听ctrl+c键</button>
+    </div>
 </div>
 <script type="module">
+
     import {
         useHttpRequest,
         useEventDispatch,
@@ -208,7 +250,8 @@ useAge:
         useFullScreen,
         useExitFullScreen,
         useFullScreenChange,
-        useCopy, useStorage
+        useCopy, useStorage,
+        useDownload, useKeyboard
     } from "../dist/index.esm.mjs";
         useClickOutSide(document.getElementById('b1'),(event)=>{
             // console.log(event)
@@ -231,14 +274,16 @@ useAge:
 
     useEventListener(document.getElementById('b4'),'click',(event)=>{
         console.log(request.getConfig())
-        request.get('v1/homebrands?q=4',{a:3}).then((res)=>{
+        request.get('v1/homebrands?q=4',{a:3},{
+            responseType:''
+        }).then((res)=>{
             console.log("返回数据：",res)
         })
     })
     useEventListener(document.getElementById('b41'),'click',(event)=>{
         const request1 = useHttpRequest()
         console.log(request1.getConfig())
-        request1.get('./abao.png').then((res)=>{
+        request1.get('./abao.png',{},{responseType: 'blob'}).then((res)=>{
             console.log("返回数据：",res)
             document.getElementById('i2').src = URL.createObjectURL(res)
         })
@@ -332,7 +377,48 @@ useAge:
         console.log(Storage.removeLocal('local'))
     })
 
+    useEventListener(document.getElementById('b20'),'click',()=>{
+        useDownload('./abao.png','baidu.png').then((res)=>{
+            console.log(res)
+        })
+    })
+    useEventListener(document.getElementById('b21'),'click',()=>{
+        const blob = new Blob(['hello world,中文'], { type: 'text/plain;charset=utf-8' })
+        useDownload(blob,'blob.txt').then((res)=>{
+            console.log(res)
+        })
+    })
+    const cvs = document.getElementById('c1');
+    const ctx = cvs.getContext('2d');
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0,0,50,50);
+    ctx.fill()
+    useEventListener(document.getElementById('b22'),'click',()=>{
+        cvs.toBlob(blob=>{
+            useDownload(blob,'canvas.png').then((res)=>{
+                console.log(res)
+            })
+        })
+    })
 
+    useEventListener(document.getElementById('b23'),'click',()=>{
+        useHttpRequest().get('./abao.png',null,{responseType:'blob'}).then(blob=>{
+            useDownload(blob,'异步blob.png').then((res)=>{
+                console.log(res)
+            })
+        })
+    })
+
+    useEventListener(document.getElementById('b24'),'click',()=>{
+        useKeyboard('q',(event)=>{
+            console.log(event)
+        })
+    })
+    useEventListener(document.getElementById('b25'),'click',()=>{
+        useKeyboard({key: 'c',ctrl:true},(event)=>{
+            console.log(event)
+        })
+    })
 </script>
 </body>
 </html>

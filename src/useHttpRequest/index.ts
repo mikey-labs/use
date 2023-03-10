@@ -47,10 +47,10 @@ const isAbsolutePath = (url: string): boolean => {
 };
 abstract class IHttpRequest {
     public abstract getConfig(): FetchConfig;
-    public abstract get<T>(url: string, data: object, header?: HttpHeader): Promise<T>;
-    public abstract post<T>(url: string, data: object, headers?: HttpHeader): Promise<T>;
-    public abstract delete<T>(url: string, data: object, headers?: HttpHeader): Promise<T>;
-    public abstract put<T>(url: string, data: object, headers?: HttpHeader): Promise<T>;
+    public abstract get<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
+    public abstract post<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
+    public abstract delete<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
+    public abstract put<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
 }
 
 class HttpRequest implements IHttpRequest {
@@ -60,6 +60,7 @@ class HttpRequest implements IHttpRequest {
     #defaultFetchConfig: FetchConfig = {
         base: "",
         credentials: <RequestCredentials>"same-origin",
+        responseType:<XMLHttpRequestResponseType>"json",
         headers: {
             "Content-Type": RequestContentType.json,
         },
@@ -74,23 +75,29 @@ class HttpRequest implements IHttpRequest {
     constructor(config: FetchConfig) {
         this.#config = mergeConfig(this.#defaultFetchConfig, config);
     }
-    public invoke<T>(method: string, url: string, data: object, headers?: HttpHeader): Promise<T> {
-        return this.#request(method, urlSplice(url, this.#config.base), data, {
+    public invoke<T>(method: string, url: string, data: object, config?: FetchConfig): Promise<T> {
+        return this.#request(
+            method,
+            urlSplice(url, this.#config.base),
+            data,
+    {
             ...this.#config,
-            headers: mergeHeader({ ...this.#config.headers }, headers),
-        });
+            ...config,
+            headers: mergeHeader({ ...this.#config.headers }, config?.headers),
+            }
+        );
     }
-    public get<T>(url: string, data: object = {}, headers?: HttpHeader): Promise<T> {
-        return this.invoke(HttpMethod.GET, url, data, headers);
+    public get<T>(url: string, data: object = {}, config?: FetchConfig): Promise<T> {
+        return this.invoke(HttpMethod.GET, url, data, config);
     }
-    public post<T>(url: string, data: object = {}, headers?: HttpHeader): Promise<T> {
-        return this.invoke(HttpMethod.POST, url, data, headers);
+    public post<T>(url: string, data: object = {}, config?: FetchConfig): Promise<T> {
+        return this.invoke(HttpMethod.POST, url, data, config);
     }
-    public delete<T>(url: string, data: object = {}, headers?: HttpHeader): Promise<T> {
-        return this.invoke(HttpMethod.DELETE, url, data, headers);
+    public delete<T>(url: string, data: object = {}, config?: FetchConfig): Promise<T> {
+        return this.invoke(HttpMethod.DELETE, url, data, config);
     }
-    public put<T>(url: string, data: object = {}, headers?: HttpHeader): Promise<T> {
-        return this.invoke(HttpMethod.PUT, url, data, headers);
+    public put<T>(url: string, data: object = {}, config?: FetchConfig): Promise<T> {
+        return this.invoke(HttpMethod.PUT, url, data, config);
     }
     public getConfig(): FetchConfig {
         return this.#config;

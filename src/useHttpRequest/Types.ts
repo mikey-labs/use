@@ -8,7 +8,8 @@ export enum HttpMethod {
 
 export enum RequestContentType {
     json = "application/json",
-    text = "text/html",
+    html = "text/html",
+    text = "text/plain",
     formData = "multipart/form-data",
     urlencoded = "application/x-www-form-urlencoded",
 }
@@ -25,11 +26,13 @@ export type XMLHttpRequestInit = {
     method: string;
     credentials: RequestCredentials;
     body?: string;
+    responseType?:XMLHttpRequestResponseType;
     headers?: HttpHeader;
 };
 
 export type FetchConfig = {
     base?: string;
     credentials?: RequestCredentials;
+    responseType?:XMLHttpRequestResponseType;
     headers?: HttpHeader;
 };

@@ -51,10 +51,6 @@ Using iife
 </script>
 ```
 
-## Browser Support
-
-Support all modern browsers
-
 ## Usage(example by ESM)
 
 #### useEventListener
@@ -92,29 +88,29 @@ useClickOutSide(HTMLElement,(event)=>{
 //定义
 declare abstract class IHttpRequest {
     abstract getConfig(): FetchConfig;
-    abstract get<T>(url: string, data: object, header?: HttpHeader): Promise<T>;
-    abstract post<T>(url: string, data: object, headers?: HttpHeader): Promise<T>;
-    abstract delete<T>(url: string, data: object, headers?: HttpHeader): Promise<T>;
-    abstract put<T>(url: string, data: object, headers?: HttpHeader): Promise<T>;
+    abstract get<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
+    abstract post<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
+    abstract delete<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
+    abstract put<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
 }
 export declare function useHttpRequest(options: FetchConfig): IHttpRequest;
 
 import { useHttpRequest } from "@zhengxy/use";
-// 默认配置：
-//         {
-//             base:'',//默认api host
-//                 credentials:"include" | "omit" | "same-origin"('default'),
-//             headers:HttpHeaders
-//         }
+FetchConfig = {
+    base:'',//默认api host
+    credentials:"include" | "omit" | "same-origin", // 'default',
+    responseType: "" | "arraybuffer" | "blob" | "document" | "json" | "text", //指定返回类型，仅当使用xmlhttprequest请求方式的时候使用,fetch方式无需指定，也就是说如果您在做图片，文件等资源请求的时候请指定为“blob” 或者 “arraybuffer”
+    headers:HttpHeaders
+}
 // getConfig():获取默认配置
 const request = useHttpRequest({
     credentials:'omit',//RequestCredentials 对象
     base:'https://www.17nft.com/',
 })
-request.get(url: string, data: object, headers?: HttpHeader): Promise
-request.post(url: string, data: object, headers?: HttpHeader): Promise
-request.put(url: string, data: object, headers?: HttpHeader): Promise
-request.delete(url: string, data: object, headers?: HttpHeader): Promise
+request.get(url: string, data: object, config?: FetchConfig): Promise
+request.post(url: string, data: object, config?: FetchConfig): Promise
+request.put(url: string, data: object, config?: FetchConfig): Promise
+request.delete(url: string, data: object, config?: FetchConfig): Promise
 ```
 
 #### usePageVisibility
@@ -208,6 +204,73 @@ Storage.removeLocal('session')
 Storage.removeSession('session')
 ```
 
+#### useDownload
+
+```typescript
+//封装下载方法，支持传url和Blob
+//定义
+
+export declare function useDownload(target: string | Blob, fileName: string): Promise<boolean>;
+
+import { useDownload } from "@zhengxy/use";
+//保存普通链接
+useDownload('https://www.baidu.com/img/flexible/logo/pc/result.png','blob.txt').then((res)=>{
+    console.log(res)
+})
+//canvas
+canvas.toBlob(blob => {
+    useDownload(blob, 'canvas.png').then((res) => {
+        console.log(res)
+    })
+})
+//结合异步,注意跨域问题
+useHttpRequest().get('https://www.baidu.com/img/flexible/logo/pc/result.png',null,{responseType:'blob'}).then(blob => {
+    console.log(blob)
+    useDownload(blob, '异步blob.png').then((res) => {
+        console.log(res)
+    })
+})
+
+//保存Blob
+const blob = new Blob(['hello world,中文'], { type: 'text/plain;charset=utf-8' })
+useDownload(blob,'blob.txt').then((res)=>{
+    console.log(res)
+})
+```
+
+#### useKeyboard
+```typescript
+//监听键盘事件，支持组合键，如ctrl+c,指定ctrl为true，注意：特殊符号比如“?”需要开启shift，因为打出"?"需要按shift按键
+
+//定义
+export type PressTypes = 'keydown' | 'keyup';
+export type KeyboardOptions = {
+    key: string; // 监听的字符，如ESC，Tab这些按键，值与KeyboardEvent返回的key值一致
+    type?: PressTypes; // 'keydown' | 'keyup' 监听按下还是抬起
+    caseSensitive?: boolean; //支持大小写敏感？默认不支持，大小写都能监听
+    once?: boolean; // 监听一次
+    ctrl?: boolean; // 监听 组合键 ctrl
+    shift?: boolean;// 监听 组合键 shift
+    alt?: boolean;// 监听 组合键 alt
+    meta?: boolean;// 监听 组合键 meta
+};
+export declare function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void): void;
+
+
+//使用方式：
+import { useKeyboard } from "@zhengxy/use";
+useKeyboard('q',(event)=>{
+    console.log(event)
+})
+useKeyboard({key: 'c',ctrl:true},(event)=>{
+    console.log(event)
+})
+```
+
+
+## Browser Support
+
+Support all modern browsers
 
 ## LICENSE
 

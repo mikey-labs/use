@@ -4,22 +4,23 @@ import { isSupportFetch, object2Url } from "../utils";
 export const createHttpRequest = (): XMLHttpRequest => {
     return new XMLHttpRequest();
 };
-async function fetchAjax(url: string, options: RequestInit): Promise<any>;
-function fetchAjax(url: string, options: RequestInit): Promise<any> {
+async function fetchCaller(url: string, options: RequestInit): Promise<any>;
+function fetchCaller(url: string, options: RequestInit): Promise<any> {
     return fetch(url, options).then(async (response) => {
         if (response.status === 200) {
-            const contentType = response.headers.get("content-type") || "";
+            const contentType = response.headers.get("content-type") ?? "";
             if (contentType.includes(RequestContentType.json)) return response.json();
-            if (contentType.includes(RequestContentType.text)) return response.text();
+            if (contentType.includes(RequestContentType.text) || contentType.includes(RequestContentType.html)) return response.text();
             return response.blob();
         } else {
             throw Error(await response.text());
         }
     });
 }
-function xmlHttpAjax<T>(url: string, options: XMLHttpRequestInit): Promise<T>;
-function xmlHttpAjax<T>(url: string, options: XMLHttpRequestInit): Promise<T> {
-    const { method, body, headers, credentials } = options;
+function xmlHttpCaller<T>(url: string, options: XMLHttpRequestInit): Promise<T>;
+function xmlHttpCaller<T>(url: string, options: XMLHttpRequestInit): Promise<T> {
+    console.log(options)
+    const { method, body, headers, credentials,responseType} = options;
     return new Promise((resolve, reject) => {
         const request = createHttpRequest();
         request.open(method, url);
@@ -29,22 +30,27 @@ function xmlHttpAjax<T>(url: string, options: XMLHttpRequestInit): Promise<T> {
         request.withCredentials =
             credentials === <RequestCredentials>"same-origin" || credentials === <RequestCredentials>"include";
         request.send(body);
+        request.responseType = responseType ?? '';
         request.onreadystatechange = () => {
             if (request.readyState === 4) {
                 if (request.status === 200) {
-                    const { responseType } = request;
-                    switch (<XMLHttpRequestResponseType>responseType) {
-                        case "json":
-                            resolve(JSON.parse(request.responseText));
-                            break;
+                    console.log(request)
+                    switch (request.responseType) {
+                        case "":
                         case "text":
-                            resolve(request.responseText as any);
-                            break;
+                            try {
+                                const json = JSON.parse(request.responseText);
+                                resolve(json);
+                            } catch (e) {
+                                resolve(request.responseText as any);
+                            }
+                        break;
                         case "document":
                             resolve(request.responseXML as any);
-                            break;
+                        break;
                         default:
                             resolve(request.response);
+                        break;
                     }
                 } else {
                     reject(request.response);
@@ -53,8 +59,8 @@ function xmlHttpAjax<T>(url: string, options: XMLHttpRequestInit): Promise<T> {
         };
     });
 }
-const getAjax = (): Function => {
-    return isSupportFetch ? fetchAjax : xmlHttpAjax;
+const getAjaxInstance = (): Function => {
+    return isSupportFetch ? fetchCaller : xmlHttpCaller;
 };
 const serializeBody = (body: any): BodyInit => {
     if (Object.prototype.toString.call(body) === "[object Object]") {
@@ -64,7 +70,7 @@ const serializeBody = (body: any): BodyInit => {
     }
 };
 export const httpCaller: IRequest = function (method, url, params = {}, config = {}) {
-    const { credentials, headers } = config;
+    const { credentials, headers, responseType } = config;
     const upperCaseMethod = method.toUpperCase();
     switch (upperCaseMethod) {
         case HttpMethod.GET:
@@ -72,15 +78,17 @@ export const httpCaller: IRequest = function (method, url, params = {}, config =
             if (querystring) {
                 url += (url.includes("?") ? "&" : "?") + querystring;
             }
-            return getAjax()(url, {
+            return getAjaxInstance()(url, {
                 method,
                 credentials,
+                responseType,
                 headers,
             });
         default:
-            return getAjax()(url, {
+            return getAjaxInstance()(url, {
                 method,
                 credentials,
+                responseType,
                 body: serializeBody(params),
                 headers,
             });

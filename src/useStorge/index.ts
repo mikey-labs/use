@@ -6,6 +6,10 @@ export type UseType = 'auto' | 'storage' | 'cookie'
 export type StorageOption = {
     use?:UseType
 }
+
+/**
+ * @desc Storage 综合实现类
+ */
 class DataStorage implements IStorage{
     #config:StorageOption = {}
     constructor(options:StorageOption = {}) {
@@ -34,6 +38,11 @@ class DataStorage implements IStorage{
     }
 
 }
+
+/**
+ * @desc 初始化storage对象
+ * @param options 配置项
+ */
 export const useStorage = (options?:StorageOption):IStorage=>{
     return new DataStorage(options);
 }
