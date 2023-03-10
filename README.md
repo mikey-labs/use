@@ -16,8 +16,8 @@
 Using `npm` or `pnpm` to install
 
 ```bash
-  # install latest
-  npm/pnpm i @zhengxy/use;
+# install latest
+npm/pnpm i @zhengxy/use;
 ```
 
 Using `yarn`
@@ -29,26 +29,26 @@ yarn add @zhengxy/use;
 
 Using ESM
 ```js
-    // import all Api
-    import * as Tools from '@zhengxy/use';
-    // import some Api
-    import { useHttpRequest,useClickOutSide } from '@zhengxy/use';
+// import all Api
+import * as Tools from '@zhengxy/use';
+// import some Api
+import { useHttpRequest,useClickOutSide } from '@zhengxy/use';
 ```
 
 Using CommonJs
 
 ```js
-    const Tools = require('@zhengxy/use');
-    Tools.useHttpRequest()
+const Tools = require('@zhengxy/use');
+Tools.useHttpRequest()
 ```
 
 Using iife
 ```html
-    <script src="pathto/dist/index.browser.js"></script>
-    <script>
-        console.log(Tools);
-        Tools.useHttpRequest()
-    </script>
+<script src="pathto/dist/index.browser.js"></script>
+<script>
+    console.log(Tools);
+    Tools.useHttpRequest()
+</script>
 ```
 
 ## Browser Support
