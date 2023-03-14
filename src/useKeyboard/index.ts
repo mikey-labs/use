@@ -10,7 +10,7 @@ export type KeyboardOptions = {
     alt?:boolean,
     meta?:boolean
 }
-const checkKeyIsFire = (e:KeyboardEvent,options:KeyboardOptions)=>{
+const checkKeyIsFire = (e:KeyboardEvent,options:KeyboardOptions):boolean=>{
     const {ctrlKey,shiftKey,altKey,metaKey,key:eventKey} = e;
     const {ctrl,shift,alt,meta,key,caseSensitive} = options;
     return (ctrl === ctrlKey && shift === shiftKey && alt === altKey && meta === metaKey) &&
