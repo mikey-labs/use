@@ -237,6 +237,41 @@ useAge:
         <button id="b25">监听ctrl+c键</button>
     </div>
 </div>
+
+<div class="block" style="--title: 'Util工具类';">
+    <div class="note">提供了一系列工具函数及变量</div>
+    <code class="note">
+        使用方式：
+        //是否是浏览器环境
+        export declare const inBrowser: boolean;
+        //是否支持Fetch
+        export declare const isSupportFetch: boolean;
+        //是否支持FileReader
+        export declare const isSupportFileReader: boolean;
+        //是否是Safari
+        export declare const isSafari: boolean;
+        //是否小于IE10
+        export declare const isIElt10: boolean;
+
+        //是否支持Storage
+        export declare const isSupportStorage: boolean;
+        //是否是移动端
+        export declare const isMobile: boolean;
+        /**
+        * @desc 将对象转换成url字符串，&连接起来
+        * @param obj 需要转换的对象
+        * */
+        export declare const object2Url: (obj: object) => string;
+        /**
+        * @desc 时间转换
+        * @param timestamp 时间戳
+        * @param format 格式化参数
+        * @return {string}
+        */
+        export declare const formatDate: (timestamp: string | number, format?: string) => string;
+
+    </code>
+</div>
 <script type="module">
 
     import {
@@ -251,7 +286,8 @@ useAge:
         useExitFullScreen,
         useFullScreenChange,
         useCopy, useStorage,
-        useDownload, useKeyboard
+        useDownload, useKeyboard,
+        formatDate,
     } from "../dist/index.esm.mjs";
         useClickOutSide(document.getElementById('b1'),(event)=>{
             // console.log(event)
@@ -419,6 +455,7 @@ useAge:
             console.log(event)
         })
     })
+    console.log(formatDate(new Date().getTime(),'yyyy-MM-dd hh:mm:ss S'))
 </script>
 </body>
 </html>

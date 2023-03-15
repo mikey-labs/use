@@ -23,3 +23,30 @@ export const object2Url:(obj:object)=>string = (obj)=>{
     }
     return res.join('&')
 }
+
+/**
+ * @desc 时间转换
+ * @param timestamp 时间戳
+ * @param format 格式化参数
+ * @return {string}
+ */
+export const formatDate = (timestamp:string | number, format:string = 'yyyy-MM-dd hh:mm:ss'):string=>{
+    const date = new Date(Number(timestamp));
+    const o = {
+        'M+': date.getMonth() + 1, // month
+        'd+': date.getDate(), // day
+        'h+': date.getHours(), // hour
+        'm+': date.getMinutes(), // minute
+        's+': date.getSeconds(), // second
+        'q+': Math.floor((date.getMonth() + 3) / 3), // quarter
+        'S': date.getMilliseconds()
+    };
+    let result;
+    !!(result = /(y+)/.exec(format)) && (format = format.replace(result[0], String(date.getFullYear()).substring(4 - result[0].length)));
+    Object.keys(o).map((k)=>{
+        const reg = new RegExp('(' + k + ')');
+        // @ts-ignore
+        !!(result = reg.exec(format)) && (format = format.replace(reg, result[0].length === 1 ? o[k] : ('00' + o[k]).substring(String(o[k]).length)));
+    })
+    return format;
+}

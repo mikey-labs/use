@@ -54,8 +54,8 @@ Using iife
 ## Usage(example by ESM)
 
 #### useEventListener
+useEventListener添加元素监听事件，当元素被移除时候自动移除监听
 ```typescript
-//useEventListener添加元素监听事件，当元素被移除时候自动移除监听
 //定义
 export declare const useEventListener: (el: Node, event: string, callback: Function, options?: AddEventListenerOptions | boolean) => void;
 
@@ -69,8 +69,8 @@ useEventListener(HTMLElement,'click',(e)=>{
 ```
 
 #### useClickOutside
+点击元素外部监听事件，当监听元素被移除，监听事件自动移除
 ```typescript
-//点击元素外部监听事件，当监听元素被移除，监听事件自动移除
 //定义
 export declare function useClickOutSide(target: Element | null | undefined, listener: EventListener, options?: UseClickOutSideOptions): void;
 
@@ -82,9 +82,9 @@ useClickOutSide(HTMLElement,(event)=>{
 ```
 
 #### useHttpRequest
+简单封装Fetch 和 XMLHttpRequest 请求,如果不支持Fetch api 使用XMLHttpRequest
+提供默认支持Get，Post，Put，Delete，如有其他方式直接调用invoke方法
 ```typescript
-//简单封装Fetch 和 XMLHttpRequest 请求,如果不支持Fetch api 使用XMLHttpRequest
-//提供默认支持Get，Post，Put，Delete，如有其他方式直接调用invoke方法
 //定义
 declare abstract class IHttpRequest {
     abstract getConfig(): FetchConfig;
@@ -114,8 +114,8 @@ request.delete(url: string, data: object, config?: FetchConfig): Promise
 ```
 
 #### usePageVisibility
+基于document.visibilityState，当前网页是否显示在前台,如果进入页面就需要显示状态，手动调用document.visibilityState获取
 ```typescript
-//基于document.visibilityState，当前网页是否显示在前台,如果进入页面就需要显示状态，手动调用document.visibilityState获取
 //定义
 export declare function usePageVisibility(callback: (visibility: string) => void): void;
 
@@ -125,8 +125,8 @@ usePageVisibility((state)=>{
 })
 ```
 #### useWindowResize
+整合windowresize和移动端横竖屏切换orientationchange事件监听
 ```typescript
-//整合windowresize和移动端横竖屏切换orientationchange事件监听
 //定义
 export declare function useWindowResize(callback: (width: number, height: number, args: IArguments) => void): void;
 
@@ -137,8 +137,8 @@ useWindowResize((width,height,e)=>{
 ```
 
 #### useEventDispatch,useEventObserver
+封装postMessage 发送和接受消息,如和iframe通信
 ```typescript
-//封装postMessage 发送和接受消息,如和iframe通信
 //定义
 export declare function useEventDispatch(eventName: string, data: any, options?: EventOptions): void;
 export declare function useEventObserver(eventName: string, callback: (data: any, event: MessageEvent) => void, options?: EventOptions): void;
@@ -163,8 +163,8 @@ useEventObserver('hello',(data,e)=>{
 ```
 
 #### useFullScreen
+封装全屏，退出全屏方法,监听全屏
 ```typescript
-//封装全屏，退出全屏方法,监听全屏
 //定义
 export declare function useFullScreen(target: Node): any;
 export declare function useExitFullScreen(): any;
@@ -178,8 +178,8 @@ useFullScreenChange((isFullScreen,event)=>{
 })
 ```
 #### useCopy
+封装复制文本方法
 ```typescript
-//封装复制文本方法
 //定义
 export declare const useCopy: (text: string) => Promise<boolean>;
 
@@ -191,8 +191,8 @@ useCopy('复制文本').then(res=>{
 ```
 
 #### useStorage
+封装本地存储接口，优先使用localStorage,sessionStorage,不支持则用cookie
 ```typescript
-//封装本地存储接口，优先使用localStorage,sessionStorage,不支持则用cookie
 //使用方式：
 import { useStorage } from "@zhengxy/use";
 const Storage = useStorage({use:'cookie'});//use type = 'auto' | 'cookie' | 'storage'
@@ -205,9 +205,8 @@ Storage.removeSession('session')
 ```
 
 #### useDownload
-
+封装下载方法，支持传url和Blob
 ```typescript
-//封装下载方法，支持传url和Blob
 //定义
 
 export declare function useDownload(target: string | Blob, fileName: string): Promise<boolean>;
@@ -239,9 +238,9 @@ useDownload(blob,'blob.txt').then((res)=>{
 ```
 
 #### useKeyboard
+监听键盘事件，支持组合键，如ctrl+c,指定ctrl为true，注意：特殊符号比如“?”需要开启shift，因为打出"?"需要按shift按键
 ```typescript
-//监听键盘事件，支持组合键，如ctrl+c,指定ctrl为true，注意：特殊符号比如“?”需要开启shift，因为打出"?"需要按shift按键
-
+//
 //定义
 export type PressTypes = 'keydown' | 'keyup';
 export type KeyboardOptions = {
@@ -265,6 +264,40 @@ useKeyboard('q',(event)=>{
 useKeyboard({key: 'c',ctrl:true},(event)=>{
     console.log(event)
 })
+```
+
+#### Util
+封装一些常用工具
+```typescript
+//定义
+//是否是浏览器环境
+export declare const inBrowser: boolean;
+//是否支持Fetch
+export declare const isSupportFetch: boolean;
+//是否支持FileReader
+export declare const isSupportFileReader: boolean;
+//是否是Safari
+export declare const isSafari: boolean;
+//是否小于IE10
+export declare const isIElt10: boolean;
+
+//是否支持Storage
+export declare const isSupportStorage: boolean;
+//是否是移动端
+export declare const isMobile: boolean;
+/**
+* @desc 将对象转换成url字符串，&连接起来
+* @param obj 需要转换的对象
+* */
+export declare const object2Url: (obj: object) => string;
+/**
+* @desc 时间转换
+* @param timestamp 时间戳
+* @param format 格式化参数
+* @return {string}
+*/
+export declare const formatDate: (timestamp: string | number, format?: string) => string;
+
 ```
 
 
