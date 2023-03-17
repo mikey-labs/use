@@ -47,10 +47,10 @@ const isAbsolutePath = (url: string): boolean => {
 };
 abstract class IHttpRequest {
     public abstract getConfig(): FetchConfig;
-    public abstract get<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
-    public abstract post<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
-    public abstract delete<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
-    public abstract put<T>(url: string, data: object, options?: FetchConfig): Promise<T>;
+    public abstract get<T>(url: string, data?: object, options?: FetchConfig): Promise<T>;
+    public abstract post<T>(url: string, data?: object, options?: FetchConfig): Promise<T>;
+    public abstract delete<T>(url: string, data?: object, options?: FetchConfig): Promise<T>;
+    public abstract put<T>(url: string, data?: object, options?: FetchConfig): Promise<T>;
 }
 
 class HttpRequest implements IHttpRequest {
