@@ -103,6 +103,6 @@ class HttpRequest implements IHttpRequest {
         return this.#config;
     }
 }
-export function useHttpRequest(options: FetchConfig): IHttpRequest {
+export function useHttpRequest(options: FetchConfig = {}): IHttpRequest {
     return new HttpRequest(options);
 }
