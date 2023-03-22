@@ -25,8 +25,7 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mikey-labs/lib.git",
-    "directory": "packages/lib-use"
+    "url": "git+https://github.com/mikey-labs/use.git"
   },
   "keywords": [
     "utils",
@@ -36,9 +35,9 @@
   "author": "mikey",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mikey-labs/lib/issues"
+    "url": "https://github.com/mikey-labs/use/issues"
   },
-  "homepage": "https://github.com/mikey-labs/lib#readme",
+  "homepage": "https://github.com/mikey-labs/use#readme",
   "devDependencies": {
     "esbuild": "^0.17.7",
     "prettier": "^2.8.4",
