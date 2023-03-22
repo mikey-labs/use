@@ -1,6 +1,6 @@
 {
   "name": "@zhengxy/use",
-  "version": "0.0.4-beta.6",
+  "version": "0.0.4-beta.7",
   "description": "Composition API",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.mjs",
