@@ -50,3 +50,6 @@ export const formatDate = (timestamp:string | number, format:string = 'yyyy-MM-d
     })
     return format;
 }
+
+export const isNumeric = (val: string | number): boolean =>
+    typeof val === 'number' || /^\d+(\.\d+)?$/.test(val);

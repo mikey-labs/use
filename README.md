@@ -299,6 +299,76 @@ export declare const object2Url: (obj: object) => string;
 export declare const formatDate: (timestamp: string | number, format?: string) => string;
 
 ```
+#### useTouch
+封装一些常用工具
+```typescript
+//定义
+declare class Touch implements ITouch {
+    touchEventOption: TouchEventOption;
+    /**
+     * 默认touch Event
+     * @private
+     */
+    private getDefaultTouchEventOption;
+    private resetTouchEventOption;
+    /**
+     * 计算角度
+     * @param angX
+     * @param angY
+     * @return {number}
+     */
+    private getAngle;
+    /**
+     * 计算方向
+     * @return {Direction}
+     */
+    getDirection(): Direction;
+    /**
+     * 阻止默认和冒泡事件
+     * @param event
+     * @param isStopPropagation 是否冒泡
+     */
+    preventDefault(event: TouchEvent, isStopPropagation?: boolean): void;
+    /**
+     * 触摸中
+     * @param event
+     */
+    touchMove(event: TouchEvent): void;
+    /**
+     * 获取手势结果
+     */
+    getTouchResult(): TouchResult;
+    /**
+     * 触摸开始
+     * @param event
+     */
+    touchStart(event: TouchEvent): void;
+    /**
+     * 触摸结束
+     * @param event
+     */
+    touchEnd(event: TouchEvent): void;
+}
+
+//使用方式：
+const touch = useTouch();
+const d3 = document.getElementById('d3');
+useEventListener(d3,'touchstart',(e)=>{
+    touch.touchStart(e);
+})
+useEventListener(d3,'touchmove',(e)=>{
+    touch.touchMove(e);
+    const res = touch.getTouchResult();
+    d3.style.left = res.deltaX + 'px';
+    d3.style.top = res.deltaY + 'px';
+    console.log(res)
+    touch.preventDefault(e);
+})
+useEventListener(d3,'touchend',(e)=>{
+    touch.touchEnd(e)
+    console.log(touch.getTouchResult())
+})
+```
 
 
 ## Browser Support

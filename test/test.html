@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,viewport-fit=cover" />
     <title>Title</title>
     <style>
         body{
@@ -45,7 +46,7 @@
         button:hover{
             background: rgba(100,100,100,.1);
         }
-        .note{color: chocolate;font-size: 12px;padding: 5px 0;display: block;white-space: pre-wrap}
+        .note{color: chocolate;font-size: 12px;padding: 5px 0;display: block;white-space: pre-wrap;word-break: break-all}
     </style>
 </head>
 <body>
@@ -237,7 +238,32 @@ useAge:
         <button id="b25">监听ctrl+c键</button>
     </div>
 </div>
+<div class="block" style="--title: 'useTouch';">
+    <div class="note">监听手势事件，计算手势方向</div>
+    <code class="note">
+        使用方式：
+        const touch = useTouch();
+        const d3 = document.getElementById('d3');
+        useEventListener(d3,'touchstart',(e)=>{
+            touch.touchStart(e);
+        })
+        useEventListener(d3,'touchmove',(e)=>{
+            touch.touchMove(e);
+            const res = touch.getTouchResult();
+            d3.style.left = res.deltaX + 'px';
+            d3.style.top = res.deltaY + 'px';
+            console.log(res)
+            touch.preventDefault(e);
+        })
+        useEventListener(d3,'touchend',(e)=>{
+            touch.touchEnd(e)
+            console.log(touch.getTouchResult())
+        })
+    </code>
+    <div id="d3" style="width: 100%;height: 200px;background: aquamarine;position: relative;">
 
+    </div>
+</div>
 <div class="block" style="--title: 'Util工具类';">
     <div class="note">提供了一系列工具函数及变量</div>
     <code class="note">
@@ -288,6 +314,7 @@ useAge:
         useCopy, useStorage,
         useDownload, useKeyboard,
         formatDate,
+        useTouch
     } from "../dist/index.esm.mjs";
         useClickOutSide(document.getElementById('b1'),(event)=>{
             // console.log(event)
@@ -456,6 +483,24 @@ useAge:
         })
     })
     console.log(formatDate(new Date().getTime(),'yyyy-MM-dd hh:mm:ss S'))
+
+    const touch = useTouch();
+    const d3 = document.getElementById('d3');
+    useEventListener(d3,'touchstart',(e)=>{
+        touch.touchStart(e);
+    })
+    useEventListener(d3,'touchmove',(e)=>{
+        touch.touchMove(e);
+        const res = touch.getTouchResult();
+        d3.style.left = res.deltaX + 'px';
+        d3.style.top = res.deltaY + 'px';
+        d3.textContent = res
+        touch.preventDefault(e);
+    })
+    useEventListener(d3,'touchend',(e)=>{
+        touch.touchEnd(e)
+        console.log(touch.getTouchResult())
+    })
 </script>
 </body>
 </html>
