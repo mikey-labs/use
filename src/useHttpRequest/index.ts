@@ -59,7 +59,6 @@ class HttpRequest implements IHttpRequest {
     /*默认配置*/
     #defaultFetchConfig: FetchConfig = {
         base: "",
-        credentials: <RequestCredentials>"same-origin",
         responseType:<XMLHttpRequestResponseType>"json",
         headers: {
             "Content-Type": RequestContentType.json,

@@ -271,85 +271,48 @@ useKeyboard({key: 'c',ctrl:true},(event)=>{
 ```typescript
 //定义
 //是否是浏览器环境
+/**判断当前环境是否为浏览器环境*/
 export declare const inBrowser: boolean;
-//是否支持Fetch
+/**判断当前环境是否支持Fetch API*/
 export declare const isSupportFetch: boolean;
-//是否支持FileReader
+/**判断当前环境是否支持FileReader API*/
 export declare const isSupportFileReader: boolean;
-//是否是Safari
+/**判断当前环境是否支持是Safari*/
 export declare const isSafari: boolean;
-//是否小于IE10
+/**判断当前环境是否支持小于IE10*/
 export declare const isIElt10: boolean;
-
-//是否支持Storage
+/**判断当前环境是否支持Storage API*/
 export declare const isSupportStorage: boolean;
-//是否是移动端
+/**判断当前环境是否是移动端*/
 export declare const isMobile: boolean;
+/**判断当前环境是否支持 IntersectionObserver*/
+export declare const isSupportInterSectionObserver: boolean;
 /**
-* @desc 将对象转换成url字符串，&连接起来
-* @param obj 需要转换的对象
-* */
+ * @desc 将对象转换成url字符串，&连接起来
+ * @param obj 需要转换的对象
+ * */
 export declare const object2Url: (obj: object) => string;
 /**
-* @desc 时间转换
-* @param timestamp 时间戳
-* @param format 格式化参数
-* @return {string}
-*/
+ * @desc 时间转换
+ * @param timestamp 时间戳
+ * @param format 格式化参数
+ * @return {string}
+ */
 export declare const formatDate: (timestamp: string | number, format?: string) => string;
+/**
+ * @desc判断参数是否为数字
+ * @param val
+ */
+export declare const isNumeric: (val: string | number) => boolean;
+/**
+ * 是否是暗黑模式
+ */
+export declare const isDarkMode: () => boolean;
 
 ```
 #### useTouch
-封装一些常用工具
+封装手势方向控制
 ```typescript
-//定义
-declare class Touch implements ITouch {
-    touchEventOption: TouchEventOption;
-    /**
-     * 默认touch Event
-     * @private
-     */
-    private getDefaultTouchEventOption;
-    private resetTouchEventOption;
-    /**
-     * 计算角度
-     * @param angX
-     * @param angY
-     * @return {number}
-     */
-    private getAngle;
-    /**
-     * 计算方向
-     * @return {Direction}
-     */
-    getDirection(): Direction;
-    /**
-     * 阻止默认和冒泡事件
-     * @param event
-     * @param isStopPropagation 是否冒泡
-     */
-    preventDefault(event: TouchEvent, isStopPropagation?: boolean): void;
-    /**
-     * 触摸中
-     * @param event
-     */
-    touchMove(event: TouchEvent): void;
-    /**
-     * 获取手势结果
-     */
-    getTouchResult(): TouchResult;
-    /**
-     * 触摸开始
-     * @param event
-     */
-    touchStart(event: TouchEvent): void;
-    /**
-     * 触摸结束
-     * @param event
-     */
-    touchEnd(event: TouchEvent): void;
-}
-
 //使用方式：
 const touch = useTouch();
 const d3 = document.getElementById('d3');
@@ -369,7 +332,31 @@ useEventListener(d3,'touchend',(e)=>{
     console.log(touch.getTouchResult())
 })
 ```
+#### useIntersectionObserver
+监听元素是否进入可视区域，用于实现懒加载，无线滚动，上拉加载更多 等场景
+```typescript
+//定义
+export declare function useIntersectionObserver(el: Element, callback: IntersectionObserverCallback, options: IntersectionObserverInit): {
+    isSupported: boolean;
+    stop: () => void;
+} | undefined;
 
+//使用方式：
+//例子：图片懒加载
+const {isSupported,stop} = useIntersectionObserver(HTMLImageElement,([{isIntersecting}])=>{
+    console.log('是否与options root参数视口相交：',isIntersecting)
+    if(isIntersecting){
+        setTimeout(()=>{//模拟加载延时时间
+            img.src = img.dataset.src;
+            stop();
+        },2000)
+    }
+},{//参考IntersectionObserverInit对象
+    root:document,
+    threshold:1
+})
+
+```
 
 ## Browser Support
 

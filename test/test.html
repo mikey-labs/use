@@ -100,7 +100,6 @@ useAge:
     <button id="b4">Get请求</button>
     <button id="b41">Get请求图片</button>
     <img id="i2" width="100">
-    <button id="b5">Post请求</button>
     <br>
     <input type="file" id="file">
     <button id="b6">FormData请求</button>
@@ -264,6 +263,7 @@ useAge:
 
     </div>
 </div>
+
 <div class="block" style="--title: 'Util工具类';">
     <div class="note">提供了一系列工具函数及变量</div>
     <code class="note">
@@ -298,209 +298,53 @@ useAge:
 
     </code>
 </div>
+
+<div class="block" style="--title: 'useIntersectionObserver';">
+    <div class="note">监听元素是否进入可视区域，用于实现懒加载，无线滚动，上拉加载更多等场景</div>
+    <code class="note">
+        使用方式：
+        export declare const useIntersectionObserver: (el: Element, callback: IntersectionObserverCallback, options: IntersectionObserverInit) => {
+        isSupported: boolean;
+        stop: () => void;
+        } | undefined;
+    </code>
+    <div id="d4">
+        <div>图片懒加载</div>
+        <img id="i3" alt="加载中" width="264" height="280" style="background-color: chocolate" data-src="./abao.png">
+    </div>
+</div>
 <script type="module">
+    import "./src/useClickOutSide.js"
+    import "./src/useEventListener.js"
+    import "./src/useHttpRequest.js"
+    import "./src/usePageVisibility.js"
+    import "./src/useWindowResize.js"
+    import "./src/useEventDispatch.js"
+    import "./src/useFullScreen.js"
+    import "./src/useCopy.js"
+    import "./src/useStorage.js"
+    import "./src/useDownload.js"
+    import "./src/useKeyboard.js"
+    import "./src/useTouch.js"
+    import "./src/util.js"
+    import "./src/useIntersectionObserver.js"
 
-    import {
-        useHttpRequest,
-        useEventDispatch,
-        useEventObserver,
-        useClickOutSide,
-        useEventListener,
-        usePageVisibility,
-        useWindowResize,
-        useFullScreen,
-        useExitFullScreen,
-        useFullScreenChange,
-        useCopy, useStorage,
-        useDownload, useKeyboard,
-        formatDate,
-        useTouch
-    } from "../dist/index.esm.mjs";
-        useClickOutSide(document.getElementById('b1'),(event)=>{
-            // console.log(event)
-            console.log('useClickOutside按钮1::点击外部回调')
-        })
-        useClickOutSide(document.getElementById('b2'),(events)=>{
-            console.log('useClickOutside按钮2::点击外部回调')
-        })
-        useEventListener(document.getElementById('b3'),'click',()=>{
-            const b1 = document.getElementById('b1');
-            if(b1){
-                b1.parentNode.removeChild(b1)
-            }
-        })
 
-    const request = useHttpRequest({
-        credentials:'omit',//RequestCredentials 对象
-        base:'https://www.17nft.com/',
-    })
 
-    useEventListener(document.getElementById('b4'),'click',(event)=>{
-        console.log(request.getConfig())
-        request.get('v1/homebrands?q=4',{a:3},{
-            responseType:''
-        }).then((res)=>{
-            console.log("返回数据：",res)
-        })
-    })
-    useEventListener(document.getElementById('b41'),'click',(event)=>{
-        const request1 = useHttpRequest()
-        console.log(request1.getConfig())
-        request1.get('./abao.png',{},{responseType: 'blob'}).then((res)=>{
-            console.log("返回数据：",res)
-            document.getElementById('i2').src = URL.createObjectURL(res)
-        })
 
-    })
-    useEventListener(document.getElementById('b5'),'click',(event)=>{
-        console.log(request.getConfig())
-        request.post('v1/homebrands?q=4',{a:3}).then((res)=>{
-            console.log("返回数据：",res)
-        })
-    })
-    useEventListener(document.getElementById('b6'),'click',(event)=>{
-        if(document.getElementById('file').files[0]){
-            const formdata = new FormData();
-            formdata.append('file',document.getElementById('file').files[0])
-            //单个请求不会改变base默认配置
-            request.post('v1/homebrands?q=4',formdata,{'Content-Type':'multipart/form-data'}).then((res)=>{
-                console.log(request.getConfig())
-                console.log("返回数据：",res)
-            })
-        } else {
-            alert('请选择文件')
-        }
-    })
 
-    document.getElementById('s1').textContent = document.visibilityState
-    usePageVisibility((state)=>{
-        console.log('visibilityState:',state)
-        document.getElementById('s1').textContent = state
-    })
 
-    useEventListener(document.getElementById('b7'),'click',()=>{
-        console.log('监听一次')
-    },{once:true})
-    useEventListener(document.getElementById('b8'),'click',(e)=>{
-        e.stopPropagation()
-        console.log('绑定事件')
-    })
 
-    useWindowResize((width,height,e)=>{
-        console.log(width,height,e)
-        document.getElementById('s2').textContent = width + ',' + height
-    })
 
-    useEventListener(document.getElementById('b9'),'click',()=>{
-        useEventDispatch('hello',{a:'hello,你好'},{
-            target:document.getElementById('i1').contentWindow,
-            origin:location.origin
-        })
-    })
-    useEventObserver('custom',(data)=>{
-        console.log('接收子窗口消息',data)
-    })
-    useEventListener(document.getElementById('b10'),'click',()=>{
-        useFullScreen(document.getElementById('d1'))
-    })
-    useEventListener(document.getElementById('b11'),'click',()=>{
-        useExitFullScreen()
-    })
-    useFullScreenChange((isFullScreen,event)=>{
-        document.getElementById('s3').textContent = isFullScreen;
-    })
 
-    useEventListener(document.getElementById('b12'),'click',()=>{
-        useCopy(document.getElementById('d2').textContent).then(res=>{
-            console.log(res)
-            alert(res ? '复制成功' : '复制失败')
-        })
-    })
 
-    const Storage = useStorage({use:'cookie'});
-    useEventListener(document.getElementById('b14'),'click',()=>{
-        console.log(Storage.setSession('session',''))
-    })
-    useEventListener(document.getElementById('b15'),'click',()=>{
-        console.log(useStorage().getSession('session'))
-        console.log(Storage.getSession('session'))
 
-    })
-    useEventListener(document.getElementById('b16'),'click',()=>{
-        console.log(Storage.removeSession('session'))
-    })
 
-    useEventListener(document.getElementById('b17'),'click',()=>{
-        console.log(Storage.setLocal('local',{key:'local'}))
-    })
-    useEventListener(document.getElementById('b18'),'click',()=>{
-        console.log(Storage.getLocal('local'))
-    })
-    useEventListener(document.getElementById('b19'),'click',()=>{
-        console.log(Storage.removeLocal('local'))
-    })
 
-    useEventListener(document.getElementById('b20'),'click',()=>{
-        useDownload('./abao.png','baidu.png').then((res)=>{
-            console.log(res)
-        })
-    })
-    useEventListener(document.getElementById('b21'),'click',()=>{
-        const blob = new Blob(['hello world,中文'], { type: 'text/plain;charset=utf-8' })
-        useDownload(blob,'blob.txt').then((res)=>{
-            console.log(res)
-        })
-    })
-    const cvs = document.getElementById('c1');
-    const ctx = cvs.getContext('2d');
-    ctx.fillStyle = "rgba(0,0,0,0.2)";
-    ctx.fillRect(0,0,50,50);
-    ctx.fill()
-    useEventListener(document.getElementById('b22'),'click',()=>{
-        cvs.toBlob(blob=>{
-            useDownload(blob,'canvas.png').then((res)=>{
-                console.log(res)
-            })
-        })
-    })
 
-    useEventListener(document.getElementById('b23'),'click',()=>{
-        useHttpRequest().get('./abao.png',null,{responseType:'blob'}).then(blob=>{
-            useDownload(blob,'异步blob.png').then((res)=>{
-                console.log(res)
-            })
-        })
-    })
 
-    useEventListener(document.getElementById('b24'),'click',()=>{
-        useKeyboard('q',(event)=>{
-            console.log(event)
-        })
-    })
-    useEventListener(document.getElementById('b25'),'click',()=>{
-        useKeyboard({key: 'c',ctrl:true},(event)=>{
-            console.log(event)
-        })
-    })
-    console.log(formatDate(new Date().getTime(),'yyyy-MM-dd hh:mm:ss S'))
 
-    const touch = useTouch();
-    const d3 = document.getElementById('d3');
-    useEventListener(d3,'touchstart',(e)=>{
-        touch.touchStart(e);
-    })
-    useEventListener(d3,'touchmove',(e)=>{
-        touch.touchMove(e);
-        const res = touch.getTouchResult();
-        d3.style.left = res.deltaX + 'px';
-        d3.style.top = res.deltaY + 'px';
-        d3.textContent = res
-        touch.preventDefault(e);
-    })
-    useEventListener(d3,'touchend',(e)=>{
-        touch.touchEnd(e)
-        console.log(touch.getTouchResult())
-    })
+
 </script>
 </body>
 </html>
