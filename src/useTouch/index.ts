@@ -19,7 +19,8 @@ export type TouchEventOption = {
     beginTime:number,
     endTime:number,
     endX:number,
-    endY:number
+    endY:number,
+    isDrag:boolean
 }
 
 /**
@@ -30,6 +31,7 @@ export abstract class ITouch {
     public abstract touchMove(event:TouchEvent):void;
     public abstract touchEnd(event:TouchEvent):void;
     public abstract getDirection(event:TouchEvent):Direction;
+    public abstract getTouchResult():TouchResult;
 }
 
 /**
@@ -63,7 +65,8 @@ class Touch implements ITouch{
             beginTime:0,
             endTime:0,
             endX:0,
-            endY:0
+            endY:0,
+            isDrag:false
         }
     }
     private resetTouchEventOption(){
@@ -77,6 +80,9 @@ class Touch implements ITouch{
      */
     private getAngle(angX:number, angY:number):number {
         return Math.atan2(angY, angX) * 180 / Math.PI;
+    }
+    get isDrag(){
+        return this.touchEventOption.isDrag;
     }
     /**
      * 计算方向
@@ -128,11 +134,25 @@ class Touch implements ITouch{
      * 触摸中
      * @param event
      */
-    touchMove(event: TouchEvent): void {
-        const {touches:[{clientX,clientY}]} = event;
+    touchMove(event: TouchEvent | MouseEvent): void {
+        const {clientX,clientY} = this.getClientXY(event)
         this.touchEventOption.endX = clientX;
         this.touchEventOption.endY = clientY;
         this.touchEventOption.endTime = Date.now();
+    }
+    getClientXY(event: TouchEvent | MouseEvent,isMoving:boolean = false){
+        if(event instanceof MouseEvent){
+            return {
+                clientX:event.clientX,
+                clientY:event.clientY
+            }
+        } else {
+            const [{clientX,clientY}] = isMoving ? event.changedTouches : event.touches;
+            return {
+                clientX,
+                clientY
+            }
+        }
     }
 
     /**
@@ -162,23 +182,25 @@ class Touch implements ITouch{
      * 触摸开始
      * @param event
      */
-    touchStart(event: TouchEvent): void {
+    touchStart(event: TouchEvent | MouseEvent): void {
         this.resetTouchEventOption();
-        const {touches:[{clientX,clientY}]} = event;
+        const {clientX,clientY} = this.getClientXY(event);
         this.touchEventOption.startX = clientX;
         this.touchEventOption.startY = clientY;
         this.touchEventOption.beginTime = Date.now();
+        this.touchEventOption.isDrag = true;
     }
 
     /**
      * 触摸结束
      * @param event
      */
-    touchEnd(event: TouchEvent): void {
-        const {changedTouches:[{clientX,clientY}]} = event;
+    touchEnd(event: TouchEvent | MouseEvent): void {
+        const {clientX,clientY} = this.getClientXY(event,true);
         this.touchEventOption.endX = clientX;
         this.touchEventOption.endY = clientY;
         this.touchEventOption.endTime = Date.now();
+        this.touchEventOption.isDrag = false;
     }
 }
 export function useTouch():Touch{
