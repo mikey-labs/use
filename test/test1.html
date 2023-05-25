@@ -10,7 +10,7 @@
 
 <script type="module">
     import { useEventDispatch, useEventListener, useEventObserver } from "../dist/index.esm.mjs";
-    useEventObserver('hello',(data,e)=>{
+    const {stop} = useEventObserver('hello',(data,e)=>{
         console.log('子窗口接收消息',data)
     },{origin:'http://localhost:63342'})
     useEventListener(document.getElementById('b1'),'click',()=>{

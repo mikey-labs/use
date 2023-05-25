@@ -2,72 +2,72 @@
  * Direction
  */
 export enum Direction {
-    NONE=-1,
-    CLICK=0,
-    UP=1,
-    DOWN=2,
-    LEFT=3,
-    RIGHT=4
+    NONE = -1,
+    CLICK = 0,
+    UP = 1,
+    DOWN = 2,
+    LEFT = 3,
+    RIGHT = 4,
 }
 
 /**
  * TouchEventOption
  */
 export type TouchEventOption = {
-    startX:number,
-    startY:number,
-    beginTime:number,
-    endTime:number,
-    endX:number,
-    endY:number
-}
+    startX: number;
+    startY: number;
+    beginTime: number;
+    endTime: number;
+    endX: number;
+    endY: number;
+};
 
 /**
  * ITouch
  */
 export abstract class ITouch {
-    public abstract touchStart(event:TouchEvent):void;
-    public abstract touchMove(event:TouchEvent):void;
-    public abstract touchEnd(event:TouchEvent):void;
-    public abstract getDirection(event:TouchEvent):Direction;
-    public abstract getTouchResult():TouchResult;
+    public abstract touchStart(event: TouchEvent): void;
+    public abstract touchMove(event: TouchEvent): void;
+    public abstract touchEnd(event: TouchEvent): void;
+    public abstract getDirection(event: TouchEvent): Direction;
+    public abstract getTouchResult(): TouchResult;
 }
 
 /**
  * TouchResult
  */
 export type TouchResult = {
-    direction:string,
-    deltaX:number,
-    deltaY:number,
-    offsetX:number,
-    offsetY:number,
-    startX:number,
-    startY:number,
-    isVertical:boolean,
-    isHorizontal:boolean
-}
+    direction: string;
+    deltaX: number;
+    deltaY: number;
+    offsetX: number;
+    offsetY: number;
+    startX: number;
+    startY: number;
+    isVertical: boolean;
+    isHorizontal: boolean;
+};
 /**
  * 手势事件方向控制
  */
-class Touch implements ITouch{
-    touchEventOption:TouchEventOption = this.getDefaultTouchEventOption();
+class Touch implements ITouch {
+    touchEventOption: TouchEventOption = this.getDefaultTouchEventOption();
 
     /**
      * 默认touch Event
      * @private
      */
-    private getDefaultTouchEventOption():TouchEventOption{
+    private getDefaultTouchEventOption(): TouchEventOption {
         return {
-            startX:0,
-            startY:0,
-            beginTime:0,
-            endTime:0,
-            endX:0,
-            endY:0
-        }
+            startX: 0,
+            startY: 0,
+            beginTime: 0,
+            endTime: 0,
+            endX: 0,
+            endY: 0,
+        };
     }
-    private resetTouchEventOption(){
+    private resetTouchEventOption() {
         this.touchEventOption = this.getDefaultTouchEventOption();
     }
     /**
@@ -76,22 +76,22 @@ class Touch implements ITouch{
      * @param angY
      * @return {number}
      */
-    private getAngle(angX:number, angY:number):number {
-        return Math.atan2(angY, angX) * 180 / Math.PI;
+    private getAngle(angX: number, angY: number): number {
+        return (Math.atan2(angY, angX) * 180) / Math.PI;
     }
     /**
      * 计算方向
      * @return {Direction}
      */
-    public getDirection():Direction {
-        const {startY,startX,endX,endY,beginTime,endTime} = this.touchEventOption;
+    public getDirection(): Direction {
+        const { startY, startX, endX, endY, beginTime, endTime } = this.touchEventOption;
         const angx = endX - startX;
         const angy = endY - startY;
         //如果滑动距离太短
         if (Math.abs(angx) < 5 && Math.abs(angy) < 5) {
-            if(endTime - beginTime > 0 && endTime - beginTime < 300){
-                return Direction.CLICK
-            }else {
+            if (endTime - beginTime > 0 && endTime - beginTime < 300) {
+                return Direction.CLICK;
+            } else {
                 return Direction.NONE;
             }
         }
@@ -106,7 +106,7 @@ class Touch implements ITouch{
         } else if (angle >= -45 && angle <= 45) {
             return Direction.RIGHT;
         } else {
-            return Direction.NONE
+            return Direction.NONE;
         }
     }
 
@@ -115,13 +115,13 @@ class Touch implements ITouch{
      * @param event
      * @param isStopPropagation 是否冒泡
      */
-    public preventDefault(event:TouchEvent,isStopPropagation:boolean = false) {
+    public preventDefault(event: TouchEvent, isStopPropagation: boolean = false) {
         // @ts-ignore
-        if (typeof event.cancelable !== 'boolean' || event.cancelable) {
+        if (typeof event.cancelable !== "boolean" || event.cancelable) {
             event.preventDefault();
         }
-        if(isStopPropagation){
-            event.stopPropagation()
+        if (isStopPropagation) {
+            event.stopPropagation();
         }
     }
 
@@ -130,7 +130,9 @@ class Touch implements ITouch{
      * @param event
      */
     touchMove(event: TouchEvent): void {
-        const {touches:[{clientX,clientY}]} = event;
+        const {
+            touches: [{ clientX, clientY }],
+        } = event;
         this.touchEventOption.endX = clientX;
         this.touchEventOption.endY = clientY;
         this.touchEventOption.endTime = Date.now();
@@ -139,24 +141,24 @@ class Touch implements ITouch{
     /**
      * 获取手势结果
      */
-    getTouchResult():TouchResult{
-        const {startX,endX,startY,endY} = this.touchEventOption;
-        const deltaX = (endX < 0 ? 0 : endX) - startX
-        const deltaY = endY - startY
-        const offsetX = Math.abs(deltaX)
-        const offsetY = Math.abs(deltaY)
+    getTouchResult(): TouchResult {
+        const { startX, endX, startY, endY } = this.touchEventOption;
+        const deltaX = (endX < 0 ? 0 : endX) - startX;
+        const deltaY = endY - startY;
+        const offsetX = Math.abs(deltaX);
+        const offsetY = Math.abs(deltaY);
         const direction = this.getDirection();
         return {
-            direction:Direction[direction],
+            direction: Direction[direction],
             deltaX,
             deltaY,
             offsetX,
             offsetY,
             startX,
             startY,
-            isHorizontal:direction === Direction.LEFT || direction === Direction.RIGHT,
-            isVertical:direction === Direction.UP || direction === Direction.DOWN
-        }
+            isHorizontal: direction === Direction.LEFT || direction === Direction.RIGHT,
+            isVertical: direction === Direction.UP || direction === Direction.DOWN,
+        };
     }
 
     /**
@@ -165,7 +167,9 @@ class Touch implements ITouch{
      */
     touchStart(event: TouchEvent): void {
         this.resetTouchEventOption();
-        const {touches:[{clientX,clientY}]} = event;
+        const {
+            touches: [{ clientX, clientY }],
+        } = event;
         this.touchEventOption.startX = clientX;
         this.touchEventOption.startY = clientY;
         this.touchEventOption.beginTime = Date.now();
@@ -176,12 +180,14 @@ class Touch implements ITouch{
      * @param event
      */
     touchEnd(event: TouchEvent): void {
-        const {changedTouches:[{clientX,clientY}]} = event;
+        const {
+            changedTouches: [{ clientX, clientY }],
+        } = event;
         this.touchEventOption.endX = clientX;
         this.touchEventOption.endY = clientY;
         this.touchEventOption.endTime = Date.now();
     }
 }
-export function useTouch():Touch{
+export function useTouch(): Touch {
     return new Touch();
 }

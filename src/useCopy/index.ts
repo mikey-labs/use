@@ -1,6 +1,6 @@
 import { inBrowser } from "../utils";
 
-async function clipboardCopy(text:string):Promise<boolean>{
+async function clipboardCopy(text: string): Promise<boolean> {
     if (navigator?.clipboard?.write) {
         try {
             const textBlob = new Blob([text], { type: "text/plain" });
@@ -15,19 +15,19 @@ async function clipboardCopy(text:string):Promise<boolean>{
     }
     return false;
 }
-function execCommand(text:string):boolean{
-    const textarea:HTMLTextAreaElement = document.createElement('textarea')
+function execCommand(text: string): boolean {
+    const textarea: HTMLTextAreaElement = document.createElement("textarea");
     textarea.value = text;
-    document.body.appendChild(textarea)
+    document.body.appendChild(textarea);
     textarea.select();
-    const isCopied:boolean = !!document.execCommand && document.execCommand('copy')
-    document.body.removeChild(textarea)
+    const isCopied: boolean = !!document.execCommand && document.execCommand("copy");
+    document.body.removeChild(textarea);
     return isCopied;
 }
 /**
  * @desc 复制文本
  * @param text 需要复制的文本
  * */
-export  const useCopy = async (text: string): Promise<boolean> => {
-    return inBrowser &&( await clipboardCopy(text) || execCommand(text) )
-}
+export const useCopy = async (text: string): Promise<boolean> => {
+    return inBrowser && ((await clipboardCopy(text)) || execCommand(text));
+};

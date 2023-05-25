@@ -27,9 +27,7 @@ export const Cookie: IStorage = {
     getSession(key: string): any {
         const valueString = document.cookie.replace(
             new RegExp(
-                "(?:(?:^|.*;)\\s*" +
-                encodeURIComponent(key).replace(/[-.+*]/g, "\\$&") +
-                "\\s*\\=\\s*([^;]*).*$)|^.*$"
+                "(?:(?:^|.*;)\\s*" + encodeURIComponent(key).replace(/[-.+*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"
             ),
             "$1"
         );
@@ -55,7 +53,7 @@ export const Cookie: IStorage = {
             encodeURIComponent(key) +
             "=" +
             encodeURIComponent(JSON.stringify(value)) +
-            "; expires=Thu, 01 Jan 9999 00:00:00 GMT; path=/;";//cookie 最长400天
+            "; expires=Thu, 01 Jan 9999 00:00:00 GMT; path=/;"; //cookie 最长400天
         return true;
     },
     setSession<T extends Object>(key: string, value: T): boolean {

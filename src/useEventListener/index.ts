@@ -8,9 +8,14 @@ import { observerTargetRemove } from "./TargetRemoveObserver";
  * @param callback 回调函数
  * @param options 事件配置项
  */
-export const useEventListener = function (el: Node, event: string, callback: Function,options?:AddEventListenerOptions | boolean) {
+export const useEventListener = function (
+    el: Node,
+    event: string,
+    callback: Function,
+    options?: AddEventListenerOptions | boolean
+) {
     bindEventListener(el, event, callback, options);
     observerTargetRemove(el, () => {
-        unbindEventListener(el, event, callback,options);
+        unbindEventListener(el, event, callback, options);
     });
 };

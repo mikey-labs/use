@@ -59,7 +59,7 @@ class HttpRequest implements IHttpRequest {
     /*默认配置*/
     #defaultFetchConfig: FetchConfig = {
         base: "",
-        responseType:<XMLHttpRequestResponseType>"json",
+        responseType: <XMLHttpRequestResponseType>"json",
         headers: {
             "Content-Type": RequestContentType.json,
         },
@@ -75,16 +75,11 @@ class HttpRequest implements IHttpRequest {
         this.#config = mergeConfig(this.#defaultFetchConfig, config);
     }
     public invoke<T>(method: string, url: string, data: object, config?: FetchConfig): Promise<T> {
-        return this.#request(
-            method,
-            urlSplice(url, this.#config.base),
-            data,
-    {
+        return this.#request(method, urlSplice(url, this.#config.base), data, {
             ...this.#config,
             ...config,
             headers: mergeHeader({ ...this.#config.headers }, config?.headers),
-            }
-        );
+        });
     }
     public get<T>(url: string, data: object = {}, config?: FetchConfig): Promise<T> {
         return this.invoke(HttpMethod.GET, url, data, config);

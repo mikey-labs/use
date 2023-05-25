@@ -26,13 +26,13 @@ export type XMLHttpRequestInit = {
     method: string;
     credentials: RequestCredentials;
     body?: string;
-    responseType?:XMLHttpRequestResponseType;
+    responseType?: XMLHttpRequestResponseType;
     headers?: HttpHeader;
 };
 
 export type FetchConfig = {
     base?: string;
     credentials?: RequestCredentials;
-    responseType?:XMLHttpRequestResponseType;
+    responseType?: XMLHttpRequestResponseType;
     headers?: HttpHeader;
 };

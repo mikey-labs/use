@@ -10,7 +10,8 @@ function fetchCaller(url: string, options: RequestInit): Promise<any> {
         if (response.status === 200) {
             const contentType = response.headers.get("content-type") ?? "";
             if (contentType.includes(RequestContentType.json)) return response.json();
-            if (contentType.includes(RequestContentType.text) || contentType.includes(RequestContentType.html)) return response.text();
+            if (contentType.includes(RequestContentType.text) || contentType.includes(RequestContentType.html))
+                return response.text();
             return response.blob();
         } else {
             throw Error(await response.text());
@@ -19,8 +20,7 @@ function fetchCaller(url: string, options: RequestInit): Promise<any> {
 }
 function xmlHttpCaller<T>(url: string, options: XMLHttpRequestInit): Promise<T>;
 function xmlHttpCaller<T>(url: string, options: XMLHttpRequestInit): Promise<T> {
-    console.log(options)
-    const { method, body, headers, credentials,responseType} = options;
+    const { method, body, headers, credentials, responseType } = options;
     return new Promise((resolve, reject) => {
         const request = createHttpRequest();
         request.open(method, url);
@@ -30,11 +30,10 @@ function xmlHttpCaller<T>(url: string, options: XMLHttpRequestInit): Promise<T> 
         request.withCredentials =
             credentials === <RequestCredentials>"same-origin" || credentials === <RequestCredentials>"include";
         request.send(body);
-        request.responseType = responseType ?? '';
+        request.responseType = responseType ?? "";
         request.onreadystatechange = () => {
             if (request.readyState === 4) {
                 if (request.status === 200) {
-                    console.log(request)
                     switch (request.responseType) {
                         case "":
                         case "text":
@@ -44,13 +43,13 @@ function xmlHttpCaller<T>(url: string, options: XMLHttpRequestInit): Promise<T> 
                             } catch (e) {
                                 resolve(request.responseText as any);
                             }
-                        break;
+                            break;
                         case "document":
                             resolve(request.responseXML as any);
-                        break;
+                            break;
                         default:
                             resolve(request.response);
-                        break;
+                            break;
                     }
                 } else {
                     reject(request.response);
