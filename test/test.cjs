@@ -1,2 +1,2 @@
-const d = require('../dist/index.cjs')
-console.log(d)
+const d = require("../dist/index.cjs");
+console.log(d);

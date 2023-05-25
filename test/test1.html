@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+    </head>
+    <body>
+        <button id="b1">发送消息给父窗口</button>
 
-</head>
-<body>
-<button id="b1">发送消息给父窗口</button>
-
-<script type="module">
-    import { useEventDispatch, useEventListener, useEventObserver } from "../dist/index.esm.mjs";
-    const {stop} = useEventObserver('hello',(data,e)=>{
-        console.log('子窗口接收消息',data)
-    },{origin:'http://localhost:63342'})
-    useEventListener(document.getElementById('b1'),'click',()=>{
-        useEventDispatch('custom',123,{
-            target:window.top,
-            origin:window.top.location.origin
-        })
-    })
-
-</script>
-</body>
+        <script type="module">
+            import { useEventDispatch, useEventListener, useEventObserver } from "../dist/index.esm.mjs";
+            const { stop } = useEventObserver(
+                "hello",
+                (data, e) => {
+                    console.log("子窗口接收消息", data);
+                },
+                { origin: "http://localhost:63342" }
+            );
+            useEventListener(document.getElementById("b1"), "click", () => {
+                useEventDispatch("custom", 123, {
+                    target: window.top,
+                    origin: window.top.location.origin,
+                });
+            });
+        </script>
+    </body>
 </html>

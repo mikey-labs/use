@@ -2,7 +2,7 @@ const { build, context } = require("esbuild");
 const isWatch = process.argv.includes("-w");
 const bundle = (format) => {
     const ext = format === "esm" ? ".mjs" : ".js";
-    const fileName = format === 'iife' ? `browser${ext}` : `${format}${ext}`;
+    const fileName = format === "iife" ? `browser${ext}` : `${format}${ext}`;
     const outfile = `dist/index.${fileName}`;
     const config = {
         format,

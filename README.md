@@ -3,13 +3,14 @@
 </h1>
 
 ## Features
-- 🚀 1KB Component average size
-- 🚀 Native script
-- 🚀 Zero third-party dependencies
-- 💪 Written in TypeScript
-- 📖 Extensive documentation and demos
-- 🍭 Support all project
-- 🍭 Support Tree Shaking
+
+-   🚀 1KB Component average size
+-   🚀 Native script
+-   🚀 Zero third-party dependencies
+-   💪 Written in TypeScript
+-   📖 Extensive documentation and demos
+-   🍭 Support all project
+-   🍭 Support Tree Shaking
 
 ## Install
 
@@ -21,6 +22,7 @@ npm/pnpm i @zhengxy/use;
 ```
 
 Using `yarn`
+
 ```bash
 yarn add @zhengxy/use;
 ```
@@ -28,62 +30,84 @@ yarn add @zhengxy/use;
 ## Quickstart
 
 Using ESM
+
 ```js
 // import all Api
-import * as Tools from '@zhengxy/use';
+import * as Tools from "@zhengxy/use";
 // import some Api
-import { useHttpRequest,useClickOutSide } from '@zhengxy/use';
+import { useHttpRequest, useClickOutSide } from "@zhengxy/use";
 ```
 
 Using CommonJs
 
 ```js
-const Tools = require('@zhengxy/use');
-Tools.useHttpRequest()
+const Tools = require("@zhengxy/use");
+Tools.useHttpRequest();
 ```
 
 Using iife
+
 ```html
 <script src="pathto/dist/index.browser.js"></script>
 <script>
     console.log(Tools);
-    Tools.useHttpRequest()
+    Tools.useHttpRequest();
 </script>
 ```
 
 ## Usage(example by ESM)
 
 #### useEventListener
-useEventListener添加元素监听事件，当元素被移除时候自动移除监听
+
+useEventListener 添加元素监听事件，当元素被移除时候自动移除监听
+
 ```typescript
 //定义
-export declare const useEventListener: (el: Node, event: string, callback: Function, options?: AddEventListenerOptions | boolean) => void;
+export declare const useEventListener: (
+    el: Node,
+    event: string,
+    callback: Function,
+    options?: AddEventListenerOptions | boolean
+) => void;
 
 import { useEventListener } from "@zhengxy/use";
-useEventListener(HTMLElement,'click',()=>{
-    console.log('监听一次')
-},{once:true})
-useEventListener(HTMLElement,'click',(e)=>{
-    console.log('绑定事件')
-})
+useEventListener(
+    HTMLElement,
+    "click",
+    () => {
+        console.log("监听一次");
+    },
+    { once: true }
+);
+useEventListener(HTMLElement, "click", (e) => {
+    console.log("绑定事件");
+});
 ```
 
 #### useClickOutside
+
 点击元素外部监听事件，当监听元素被移除，监听事件自动移除
+
 ```typescript
 //定义
-export declare function useClickOutSide(target: Element | null | undefined, listener: EventListener, options?: UseClickOutSideOptions): void;
+export declare function useClickOutSide(
+    target: Element | null | undefined,
+    listener: EventListener,
+    options?: UseClickOutSideOptions
+): void;
 
 import { useClickOutside } from "@zhengxy/use";
-useClickOutSide(HTMLElement,(event)=>{
+useClickOutSide(HTMLElement, (event) => {
     // console.log(event)
-    console.log('useClickOutside按钮::点击外部回调')
-})
+    console.log("useClickOutside按钮::点击外部回调");
+});
 ```
 
 #### useHttpRequest
-简单封装Fetch 和 XMLHttpRequest 请求,如果不支持Fetch api 使用XMLHttpRequest
-提供默认支持Get，Post，Put，Delete，如有其他方式直接调用invoke方法
+
+简单封装 Fetch 和 XMLHttpRequest 请求,如果不支持 Fetch api 使用 XMLHttpRequest
+提供默认支持 Get，Post，Put，Delete，如有其他方式直接调用 invoke 方法
+
 ```typescript
 //定义
 declare abstract class IHttpRequest {
@@ -114,98 +138,126 @@ request.delete(url: string, data: object, config?: FetchConfig): Promise
 ```
 
 #### usePageVisibility
-基于document.visibilityState，当前网页是否显示在前台,如果进入页面就需要显示状态，手动调用document.visibilityState获取
+
+基于 document.visibilityState，当前网页是否显示在前台,如果进入页面就需要显示状态，手动调用 document.visibilityState 获取
+
 ```typescript
 //定义
 export declare function usePageVisibility(callback: (visibility: string) => void): void;
 
 import { usePageVisibility } from "@zhengxy/use";
-usePageVisibility((state)=>{
-    console.log('visibilityState:',state)
-})
+usePageVisibility((state) => {
+    console.log("visibilityState:", state);
+});
 ```
+
 #### useWindowResize
-整合windowresize和移动端横竖屏切换orientationchange事件监听
+
+整合 windowresize 和移动端横竖屏切换 orientationchange 事件监听
+
 ```typescript
 //定义
 export declare function useWindowResize(callback: (width: number, height: number, args: IArguments) => void): void;
 
 import { useWindowResize } from "@zhengxy/use";
-useWindowResize((width,height,e)=>{
-    console.log(width,height,e)
-})
+useWindowResize((width, height, e) => {
+    console.log(width, height, e);
+});
 ```
 
 #### useEventDispatch,useEventObserver
-封装postMessage 发送和接受消息,如和iframe通信
+
+封装 postMessage 发送和接受消息,如和 iframe 通信
+
 ```typescript
 //定义
 export declare function useEventDispatch(eventName: string, data: any, options?: EventOptions): void;
-export declare function useEventObserver(eventName: string, callback: (data: any, event: MessageEvent) => void, options?: EventOptions): void;
+export declare function useEventObserver(
+    eventName: string,
+    callback: (data: any, event: MessageEvent) => void,
+    options?: EventOptions
+): void;
 export declare type EventOptions = {
-    target?:Window,
-    origin?:string
-}
+    target?: Window;
+    origin?: string;
+};
 // eventName发送的自定义事件名称，接收的eventName与发送的一致才能正常接受，data需要发送消息的对象
 // 使用useEventDispatch时，target为你要发送消息的window对象，origin为接收者的origin，如果目标窗口的domain为origin才会收到此消息，默认值"*"，所有窗口都会收到消息，注：受同源策略的限制，target和origin必须在同一域名下
 // 使用useEventObserver时，target为你要接收消息的window对象，origin为发送者的origin，如果发送者的origin为设置的origin才会收到此消息，默认值为空，接收所有为eventName的消息
 
-import { useEventDispatch,useEventObserver } from "@zhengxy/use";
-useEventDispatch('hello',{a:'hello,你好'},{
-    target:iframe.contentWindow,
-    origin:location.origin
-})
+import { useEventDispatch, useEventObserver } from "@zhengxy/use";
+useEventDispatch(
+    "hello",
+    { a: "hello,你好" },
+    {
+        target: iframe.contentWindow,
+        origin: location.origin,
+    }
+);
 
 // 其他iframe 或者当前页面其他地方
-useEventObserver('hello',(data,e)=>{
-    console.log('子窗口接收消息',data)
-},{origin:location.origin})
+useEventObserver(
+    "hello",
+    (data, e) => {
+        console.log("子窗口接收消息", data);
+    },
+    { origin: location.origin }
+);
 ```
 
 #### useFullScreen
+
 封装全屏，退出全屏方法,监听全屏
+
 ```typescript
 //定义
 export declare function useFullScreen(target: Node): any;
 export declare function useExitFullScreen(): any;
 export declare function useFullScreenChange(callback: (isFullScreen: boolean, arg: IArguments) => void): void;
 
-import { useFullScreen,useExitFullScreen,useFullScreenChange } from "@zhengxy/use";
-useFullScreen(HTMLElement)
-useExitFullScreen()
-useFullScreenChange((isFullScreen,event)=>{
-    console.log(isFullScreen)
-})
+import { useFullScreen, useExitFullScreen, useFullScreenChange } from "@zhengxy/use";
+useFullScreen(HTMLElement);
+useExitFullScreen();
+useFullScreenChange((isFullScreen, event) => {
+    console.log(isFullScreen);
+});
 ```
+
 #### useCopy
+
 封装复制文本方法
+
 ```typescript
 //定义
 export declare const useCopy: (text: string) => Promise<boolean>;
 
 import { useCopy } from "@zhengxy/use";
-useCopy('复制文本').then(res=>{
-    console.log(res)
-    alert(res ? '复制成功' : '复制失败')
-})
+useCopy("复制文本").then((res) => {
+    console.log(res);
+    alert(res ? "复制成功" : "复制失败");
+});
 ```
 
 #### useStorage
-封装本地存储接口，优先使用localStorage,sessionStorage,不支持则用cookie
+
+封装本地存储接口，优先使用 localStorage,sessionStorage,不支持则用 cookie
+
 ```typescript
 //使用方式：
 import { useStorage } from "@zhengxy/use";
-const Storage = useStorage({use:'cookie'});//use type = 'auto' | 'cookie' | 'storage'
-Storage.setSession('session',{a:1})
-Storage.getSession('session')
-Storage.getLocal('session')
-Storage.setLocal('session',{a:1})
-Storage.removeLocal('session')
-Storage.removeSession('session')
+const Storage = useStorage({ use: "cookie" }); //use type = 'auto' | 'cookie' | 'storage'
+Storage.setSession("session", { a: 1 });
+Storage.getSession("session");
+Storage.getLocal("session");
+Storage.setLocal("session", { a: 1 });
+Storage.removeLocal("session");
+Storage.removeSession("session");
 ```
 
 #### useDownload
-封装下载方法，支持传url和Blob
+
+封装下载方法，支持传 url 和 Blob
+
 ```typescript
 //定义
 
@@ -213,61 +265,66 @@ export declare function useDownload(target: string | Blob, fileName: string): Pr
 
 import { useDownload } from "@zhengxy/use";
 //保存普通链接
-useDownload('https://www.baidu.com/img/flexible/logo/pc/result.png','blob.txt').then((res)=>{
-    console.log(res)
-})
+useDownload("https://www.baidu.com/img/flexible/logo/pc/result.png", "blob.txt").then((res) => {
+    console.log(res);
+});
 //canvas
-canvas.toBlob(blob => {
-    useDownload(blob, 'canvas.png').then((res) => {
-        console.log(res)
-    })
-})
+canvas.toBlob((blob) => {
+    useDownload(blob, "canvas.png").then((res) => {
+        console.log(res);
+    });
+});
 //结合异步,注意跨域问题
-useHttpRequest().get('https://www.baidu.com/img/flexible/logo/pc/result.png',null,{responseType:'blob'}).then(blob => {
-    console.log(blob)
-    useDownload(blob, '异步blob.png').then((res) => {
-        console.log(res)
-    })
-})
+useHttpRequest()
+    .get("https://www.baidu.com/img/flexible/logo/pc/result.png", null, { responseType: "blob" })
+    .then((blob) => {
+        console.log(blob);
+        useDownload(blob, "异步blob.png").then((res) => {
+            console.log(res);
+        });
+    });
 
 //保存Blob
-const blob = new Blob(['hello world,中文'], { type: 'text/plain;charset=utf-8' })
-useDownload(blob,'blob.txt').then((res)=>{
-    console.log(res)
-})
+const blob = new Blob(["hello world,中文"], { type: "text/plain;charset=utf-8" });
+useDownload(blob, "blob.txt").then((res) => {
+    console.log(res);
+});
 ```
 
 #### useKeyboard
-监听键盘事件，支持组合键，如ctrl+c,指定ctrl为true，注意：特殊符号比如“?”需要开启shift，因为打出"?"需要按shift按键
+
+监听键盘事件，支持组合键，如 ctrl+c,指定 ctrl 为 true，注意：特殊符号比如“?”需要开启 shift，因为打出"?"需要按 shift 按键
+
 ```typescript
 //
 //定义
-export type PressTypes = 'keydown' | 'keyup';
+export type PressTypes = "keydown" | "keyup";
 export type KeyboardOptions = {
     key: string; // 监听的字符，如ESC，Tab这些按键，值与KeyboardEvent返回的key值一致
     type?: PressTypes; // 'keydown' | 'keyup' 监听按下还是抬起
     caseSensitive?: boolean; //支持大小写敏感？默认不支持，大小写都能监听
     once?: boolean; // 监听一次
     ctrl?: boolean; // 监听 组合键 ctrl
-    shift?: boolean;// 监听 组合键 shift
-    alt?: boolean;// 监听 组合键 alt
-    meta?: boolean;// 监听 组合键 meta
+    shift?: boolean; // 监听 组合键 shift
+    alt?: boolean; // 监听 组合键 alt
+    meta?: boolean; // 监听 组合键 meta
 };
 export declare function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void): void;
 
-
 //使用方式：
 import { useKeyboard } from "@zhengxy/use";
-useKeyboard('q',(event)=>{
-    console.log(event)
-})
-useKeyboard({key: 'c',ctrl:true},(event)=>{
-    console.log(event)
-})
+useKeyboard("q", (event) => {
+    console.log(event);
+});
+useKeyboard({ key: "c", ctrl: true }, (event) => {
+    console.log(event);
+});
 ```
 
 #### Util
+
 封装一些常用工具
+
 ```typescript
 //定义
 //是否是浏览器环境
@@ -308,54 +365,70 @@ export declare const isNumeric: (val: string | number) => boolean;
  * 是否是暗黑模式
  */
 export declare const isDarkMode: () => boolean;
-
 ```
+
 #### useTouch
+
 封装手势方向控制
+
 ```typescript
 //使用方式：
 const touch = useTouch();
-const d3 = document.getElementById('d3');
-useEventListener(d3,'touchstart',(e)=>{
+const d3 = document.getElementById("d3");
+useEventListener(d3, "touchstart", (e) => {
     touch.touchStart(e);
-})
-useEventListener(d3,'touchmove',(e)=>{
+});
+useEventListener(d3, "touchmove", (e) => {
     touch.touchMove(e);
     const res = touch.getTouchResult();
-    d3.style.left = res.deltaX + 'px';
-    d3.style.top = res.deltaY + 'px';
-    console.log(res)
+    d3.style.left = res.deltaX + "px";
+    d3.style.top = res.deltaY + "px";
+    console.log(res);
     touch.preventDefault(e);
-})
-useEventListener(d3,'touchend',(e)=>{
-    touch.touchEnd(e)
-    console.log(touch.getTouchResult())
-})
+});
+useEventListener(d3, "touchend", (e) => {
+    touch.touchEnd(e);
+    console.log(touch.getTouchResult());
+});
 ```
+
 #### useIntersectionObserver
+
 监听元素是否进入可视区域，用于实现懒加载，无线滚动，上拉加载更多 等场景
+
 ```typescript
 //定义
-export declare function useIntersectionObserver(el: Element, callback: IntersectionObserverCallback, options: IntersectionObserverInit): {
-    isSupported: boolean;
-    stop: () => void;
-} | undefined;
+export declare function useIntersectionObserver(
+    el: Element,
+    callback: IntersectionObserverCallback,
+    options: IntersectionObserverInit
+):
+    | {
+          isSupported: boolean;
+          stop: () => void;
+      }
+    | undefined;
 
 //使用方式：
 //例子：图片懒加载
-const {isSupported,stop} = useIntersectionObserver(HTMLImageElement,([{isIntersecting}])=>{
-    console.log('是否与options root参数视口相交：',isIntersecting)
-    if(isIntersecting){
-        setTimeout(()=>{//模拟加载延时时间
-            img.src = img.dataset.src;
-            stop();
-        },2000)
+const { isSupported, stop } = useIntersectionObserver(
+    HTMLImageElement,
+    ([{ isIntersecting }]) => {
+        console.log("是否与options root参数视口相交：", isIntersecting);
+        if (isIntersecting) {
+            setTimeout(() => {
+                //模拟加载延时时间
+                img.src = img.dataset.src;
+                stop();
+            }, 2000);
+        }
+    },
+    {
+        //参考IntersectionObserverInit对象
+        root: document,
+        threshold: 1,
     }
-},{//参考IntersectionObserverInit对象
-    root:document,
-    threshold:1
-})
-
+);
 ```
 
 ## Browser Support

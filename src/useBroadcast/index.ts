@@ -1,18 +1,7 @@
 import { bindEventListener, unbindEventListener } from "../useEventListener/EventListener";
 import { isSupportPostMessage } from "../utils";
-interface IWindow extends Window {
-    _PostMessagePolyfill: ProxyHandler<{
-        [propName: string]: MessageOptions;
-    }>;
-}
-export type MessageOptions = {
-    _event: string;
-    data?: any;
-};
-export type EventOptions = {
-    target?: IWindow;
-    origin?: string;
-};
+import { EventBus } from "./EventBus";
+import { EventOptions, MessageOptions } from "./Types";
 
 export function useEventDispatch(eventName: string, data: any, options?: EventOptions) {
     const { target = window, origin = "*" } = options || {};
@@ -20,14 +9,14 @@ export function useEventDispatch(eventName: string, data: any, options?: EventOp
         _event: eventName,
         data,
     };
-    if (isSupportPostMessage) {
+    if (!isSupportPostMessage) {
         target.postMessage(eventObj, origin);
     } else {
         const polyfillTarget = window as any;
         if (!polyfillTarget._PostMessagePolyfill) {
-            throw Error("if you want to dispatch event,you must call useEventObserver first");
+            polyfillTarget._PostMessagePolyfill = new EventBus();
         }
-        polyfillTarget._PostMessagePolyfill[eventName] = data;
+        polyfillTarget._PostMessagePolyfill.broadcastState(eventObj);
     }
 }
 export function useEventObserver(
@@ -38,7 +27,7 @@ export function useEventObserver(
     stop: Function;
 } {
     const { target = window, origin } = options || {};
-    if (isSupportPostMessage) {
+    if (!isSupportPostMessage) {
         function handler(event: MessageEvent) {
             const { data: eventData = {}, origin: eventOrigin } = event;
             const { _event, data } = eventData;
@@ -55,50 +44,11 @@ export function useEventObserver(
     } else {
         const polyfillTarget = window as any;
         if (!polyfillTarget._PostMessagePolyfill) {
-            polyfillTarget._PostMessagePolyfill = new Proxy(
-                {
-                    _cbs_: [],
-                },
-                {
-                    set(
-                        target: { _cbs_: { eventName: string; callback: Function; uuid: string }[] },
-                        p: string | symbol,
-                        newValue: any
-                    ): boolean {
-                        target._cbs_.map(({ eventName, callback }) => {
-                            if (eventName === p) {
-                                callback.call(target, newValue);
-                            }
-                        });
-                        return Reflect.set(target, p, newValue);
-                    },
-                }
-            );
+            polyfillTarget._PostMessagePolyfill = new EventBus();
         }
-        const uuid = Date.now().toString() + Math.random().toString();
-        polyfillTarget._PostMessagePolyfill._cbs_.push({
-            eventName,
-            callback,
-            uuid,
-        });
+        const uuid = polyfillTarget._PostMessagePolyfill.bindEventListener(eventName, callback);
         return {
-            stop: function () {
-                setTimeout(() => {
-                    if (polyfillTarget._PostMessagePolyfill[eventName]) {
-                        if (
-                            polyfillTarget._PostMessagePolyfill._cbs_.filter(
-                                (item: { eventName: string }) => item.eventName === eventName
-                            ).length === 1
-                        ) {
-                            delete polyfillTarget._PostMessagePolyfill[eventName];
-                        }
-                    }
-                    const index = polyfillTarget._PostMessagePolyfill._cbs_.findIndex(
-                        (item: { uuid: string }) => item.uuid === uuid
-                    );
-                    polyfillTarget._PostMessagePolyfill._cbs_.splice(index, 1);
-                });
-            },
+            stop: polyfillTarget._PostMessagePolyfill.stop.bind(polyfillTarget._PostMessagePolyfill, uuid),
         };
     }
 }
