@@ -1,8 +1,9 @@
 import { useEventListener, useKeyboard } from "../../dist/index.esm.mjs";
 
 useEventListener(document.getElementById("b24"), "click", () => {
-    useKeyboard("q", (event) => {
+    const {stop} = useKeyboard("q", (event) => {
         console.log(event);
+        //stop()
     });
 });
 useEventListener(document.getElementById("b25"), "click", () => {

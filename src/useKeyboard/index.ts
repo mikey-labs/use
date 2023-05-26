@@ -1,4 +1,4 @@
-import { useEventListener } from "../useEventListener";
+import {bindEventListener, unbindEventListener} from "../useEventListener/EventListener";
 export type PressTypes = "keydown" | "keyup";
 export type KeyboardOptions = {
     key: string;
@@ -21,7 +21,9 @@ const checkKeyIsFire = (e: KeyboardEvent, options: KeyboardOptions): boolean => 
         (caseSensitive ? key === eventKey : key.toUpperCase() === eventKey.toUpperCase())
     );
 };
-export function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void) {
+export function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void):{
+    stop:()=> void,
+} {
     const defaultOptions: KeyboardOptions = {
         key: "",
         type: <PressTypes>"keydown",
@@ -37,12 +39,11 @@ export function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e
         typeof optionsOrKey === "string" ? { key: optionsOrKey } : optionsOrKey
     );
     const { type = "keydown", once } = options;
-    useEventListener(
-        document,
-        type,
-        (e: KeyboardEvent) => {
-            checkKeyIsFire(e, options) && callback.call(null, e);
-        },
-        { once }
-    );
+    function handler(e: KeyboardEvent) {
+        checkKeyIsFire(e, options) && callback.call(null, e);
+    }
+    bindEventListener(document, type, handler, { once });
+    return {
+        stop:unbindEventListener.bind(document,document,type,handler,{ once })
+    };
 }

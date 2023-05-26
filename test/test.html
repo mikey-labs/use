@@ -104,7 +104,7 @@
             <div class="note">
                 基于document.visibilityState，当前网页是否显示在前台,如果进入页面就需要显示状态，手动调用document.visibilityState获取
             </div>
-            <code class="note"> 使用方式： usePageVisibility(callback: (visibility: string) => void): void </code>
+            <code class="note"> 使用方式： usePageVisibility(callback: (visibility: string) => void): {stop:()=>void} </code>
             当前网页是否显示在前台：<span id="s1"></span>
         </div>
 
@@ -119,7 +119,7 @@
         </div>
         <div class="block" style="--title: 'useWindowResize'">
             <div class="note">window resize和移动端横竖屏切换orientationchange事件监听</div>
-            <code class="note"> 使用方式： useWindowResize(callback: (width:number,height:number)=>void) </code>
+            <code class="note"> 使用方式： useWindowResize(callback: (width:number,height:number)=>void):{stop:()=>void} </code>
             当前窗口宽高：<span id="s2"></span>
         </div>
         <div class="block" style="--title: 'useEventDispatch,useEventObserver'">
@@ -139,7 +139,7 @@
             <div class="note">封装全屏，退出全屏方法</div>
             <code class="note">
                 使用方式： useFullScreen(target:HTMLElement):any useExitFullScreen():any
-                useFullScreenChange(callback:(isFullScreen:boolean,arg:IArguments)=>void):void
+                useFullScreenChange(callback:(isFullScreen:boolean,arg:IArguments)=>void):{stop:()=>void}
             </code>
             <div id="d1" style="background: #fff">
                 当前是否全屏:<span id="s3"></span>
@@ -196,8 +196,9 @@
             <code class="note">
                 使用方式： export type PressTypes = 'keydown' | 'keyup'; export type KeyboardOptions = { key: string;
                 type?: PressTypes; caseSensitive?: boolean; once?: boolean; ctrl?: boolean; shift?: boolean; alt?:
-                boolean; meta?: boolean; }; export declare function useKeyboard(optionsOrKey: string | KeyboardOptions,
-                callback: (e: KeyboardEvent) => void): void;
+                boolean; meta?: boolean; };
+                export declare function useKeyboard(optionsOrKey: string | KeyboardOptions,
+                callback: (e: KeyboardEvent) => void): {stop:()=>void};
             </code>
             <div>
                 <button id="b24">监听q键</button>

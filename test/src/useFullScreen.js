@@ -6,6 +6,7 @@ useEventListener(document.getElementById("b10"), "click", () => {
 useEventListener(document.getElementById("b11"), "click", () => {
     useExitFullScreen();
 });
-useFullScreenChange((isFullScreen, event) => {
+const {stop} = useFullScreenChange((isFullScreen, event) => {
     document.getElementById("s3").textContent = isFullScreen;
+    // stop()
 });

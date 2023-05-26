@@ -143,11 +143,12 @@ request.delete(url: string, data: object, config?: FetchConfig): Promise
 
 ```typescript
 //定义
-export declare function usePageVisibility(callback: (visibility: string) => void): void;
+export declare function usePageVisibility(callback: (visibility: string) => void): {stop:()=>void};
 
 import { usePageVisibility } from "@zhengxy/use";
-usePageVisibility((state) => {
+const {stop} = usePageVisibility((state) => {
     console.log("visibilityState:", state);
+    //stop()停止监听
 });
 ```
 
@@ -157,11 +158,11 @@ usePageVisibility((state) => {
 
 ```typescript
 //定义
-export declare function useWindowResize(callback: (width: number, height: number, args: IArguments) => void): void;
-
+export declare function useWindowResize(callback: (width: number, height: number, args: IArguments) => void): {stop:()=>void};
 import { useWindowResize } from "@zhengxy/use";
-useWindowResize((width, height, e) => {
+const {stop} = useWindowResize((width, height, e) => {
     console.log(width, height, e);
+    //stop()停止监听
 });
 ```
 
@@ -176,14 +177,14 @@ export declare function useEventObserver(
     eventName: string,
     callback: (data: any, event: MessageEvent) => void,
     options?: EventOptions
-): void;
+): {stop:()=>void};
 export declare type EventOptions = {
     target?: Window;
     origin?: string;
 };
 // eventName发送的自定义事件名称，接收的eventName与发送的一致才能正常接受，data需要发送消息的对象
 // 使用useEventDispatch时，target为你要发送消息的window对象，origin为接收者的origin，如果目标窗口的domain为origin才会收到此消息，默认值"*"，所有窗口都会收到消息，注：受同源策略的限制，target和origin必须在同一域名下
-// 使用useEventObserver时，target为你要接收消息的window对象，origin为发送者的origin，如果发送者的origin为设置的origin才会收到此消息，默认值为空，接收所有为eventName的消息
+// 使用useEventObserver时，target为你要接收消息的window对象，origin为发送者的origin，如果发送者的origin为设置的origin才会收到此消息，默认值为空，接收所有为eventName的消息，返回stop方法用于停止监听
 
 import { useEventDispatch, useEventObserver } from "@zhengxy/use";
 useEventDispatch(
@@ -195,8 +196,8 @@ useEventDispatch(
     }
 );
 
-// 其他iframe 或者当前页面其他地方
-useEventObserver(
+// 其他iframe 或者当前页面其他地方 stop方法停止监听
+const {stop} = useEventObserver(
     "hello",
     (data, e) => {
         console.log("子窗口接收消息", data);
@@ -213,13 +214,15 @@ useEventObserver(
 //定义
 export declare function useFullScreen(target: Node): any;
 export declare function useExitFullScreen(): any;
-export declare function useFullScreenChange(callback: (isFullScreen: boolean, arg: IArguments) => void): void;
+export declare function useFullScreenChange(callback: (isFullScreen: boolean, arg: IArguments) => void): {stop:()=>void};
 
 import { useFullScreen, useExitFullScreen, useFullScreenChange } from "@zhengxy/use";
 useFullScreen(HTMLElement);
 useExitFullScreen();
-useFullScreenChange((isFullScreen, event) => {
+const {stop} = useFullScreenChange((isFullScreen, event) => {
     console.log(isFullScreen);
+    //停止监听
+    //stop()
 });
 ```
 
@@ -309,14 +312,15 @@ export type KeyboardOptions = {
     alt?: boolean; // 监听 组合键 alt
     meta?: boolean; // 监听 组合键 meta
 };
-export declare function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void): void;
+export declare function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void): {stop:()=>void};
 
 //使用方式：
 import { useKeyboard } from "@zhengxy/use";
-useKeyboard("q", (event) => {
+const {stop} = useKeyboard("q", (event) => {
     console.log(event);
+    // stop() 停止监听
 });
-useKeyboard({ key: "c", ctrl: true }, (event) => {
+const {stop:sp} = useKeyboard({ key: "c", ctrl: true }, (event) => {
     console.log(event);
 });
 ```

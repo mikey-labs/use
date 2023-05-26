@@ -1,4 +1,4 @@
-import { bindEventListener } from "../useEventListener/EventListener";
+import {bindEventListener, unbindEventListener} from "../useEventListener/EventListener";
 
 const MethodKeys = {
     fullscreenEnabled: 0,
@@ -47,9 +47,16 @@ export function useExitFullScreen(): any {
     // @ts-ignore
     return document[vendor[MethodKeys.exitFullscreen]]();
 }
-export function useFullScreenChange(callback: (isFullScreen: boolean, arg: IArguments) => void): void {
-    bindEventListener(document, vendor[MethodKeys.fullscreenchange].toLowerCase(), () => {
+export function useFullScreenChange(callback: (isFullScreen: boolean, arg: IArguments) => void): {
+    stop:()=>void
+} {
+    function handler(){
         const isFullScreen = !!(<any>document)[vendor[MethodKeys.fullscreenElement]];
         callback.apply(null, [isFullScreen, arguments]);
-    });
+    }
+    const eventName = vendor[MethodKeys.fullscreenchange].toLowerCase()
+    bindEventListener(document,eventName , handler)
+    return {
+        stop:unbindEventListener.bind(document,document,eventName,handler)
+    }
 }

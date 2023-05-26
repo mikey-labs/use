@@ -3,6 +3,12 @@ import { isSupportPostMessage } from "../utils";
 import { EventBus } from "./EventBus";
 import { EventOptions, MessageOptions } from "./Types";
 
+/**
+ * 发送事件
+ * @param eventName 事件名称，可自定义
+ * @param data {any}发送内容
+ * @param options {EventOptions} origin与target配置
+ */
 export function useEventDispatch(eventName: string, data: any, options?: EventOptions) {
     const { target = window, origin = "*" } = options || {};
     const eventObj: MessageOptions = {
@@ -19,6 +25,13 @@ export function useEventDispatch(eventName: string, data: any, options?: EventOp
         polyfillTarget._PostMessagePolyfill.broadcastState(eventObj);
     }
 }
+
+/**
+ *
+ * @param eventName 事件名称，可自定义
+ * @param callback 回调参数
+ * @param options {EventOptions} origin与target配置
+ */
 export function useEventObserver(
     eventName: string,
     callback: (data: any, event?: MessageEvent) => void,
