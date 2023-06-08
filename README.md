@@ -90,6 +90,11 @@ useEventListener(HTMLElement, "click", (e) => {
 
 ```typescript
 //定义
+export interface UseClickOutSideOptions {
+    eventName?: string;
+    //可配置是否冒泡捕获等参数
+    listenerOption?: AddEventListenerOptions | boolean;
+}
 export declare function useClickOutSide(
     target: Element | null | undefined,
     listener: EventListener,
@@ -100,7 +105,7 @@ import { useClickOutside } from "@zhengxy/use";
 useClickOutSide(HTMLElement, (event) => {
     // console.log(event)
     console.log("useClickOutside按钮::点击外部回调");
-});
+},true);
 ```
 
 #### useHttpRequest
