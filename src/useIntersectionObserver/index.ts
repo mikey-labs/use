@@ -9,14 +9,19 @@ import { isSupportInterSectionObserver } from "../utils";
 export function useIntersectionObserver(
     el: Element,
     callback: IntersectionObserverCallback,
-    options: IntersectionObserverInit
-):
-    | {
-          isSupported: boolean;
-          stop: () => void;
-      }
-    | undefined {
-    if (!isSupportInterSectionObserver || !el) return;
+    options?: IntersectionObserverInit
+): {
+    isSupported: boolean;
+    stop: () => void;
+    observer: IntersectionObserver | null;
+} {
+    if (!isSupportInterSectionObserver || !el) {
+        return {
+            isSupported: isSupportInterSectionObserver,
+            stop: () => void 0,
+            observer: null,
+        };
+    }
     const observer = new IntersectionObserver(callback, options);
     observer.observe(el);
     const stop = function (): void {
@@ -26,5 +31,6 @@ export function useIntersectionObserver(
     return {
         isSupported: isSupportInterSectionObserver,
         stop,
+        observer,
     };
 }

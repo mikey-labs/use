@@ -1,7 +1,7 @@
 import { useIntersectionObserver } from "../../dist/index.esm.mjs";
 
 const img = document.getElementById("i3");
-const { isSupported, stop } = useIntersectionObserver(
+const { isSupported, stop, observer } = useIntersectionObserver(
     img,
     ([{ isIntersecting }]) => {
         console.log("是否与options root参数视口相交：", isIntersecting);
