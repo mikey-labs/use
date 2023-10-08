@@ -9,8 +9,14 @@ export const isSafari = inBrowser && /Version\/[\d.]+.*Safari/.test(navigator.us
 /**判断当前环境是否支持小于IE10*/
 export const isIElt10 = inBrowser && /MSIE [1-9]\./.test(navigator.userAgent);
 /**判断当前环境是否支持Storage API*/
-export const isSupportStorage =
-    inBrowser && typeof window.localStorage !== "undefined" && typeof window.sessionStorage !== "undefined";
+export const isSupportStorage = ((w)=>{
+    try {
+        return inBrowser && typeof w.localStorage !== "undefined" && typeof w.sessionStorage !== "undefined";
+    } catch (e){
+       return false;
+    }
+})(window);
+console.log(isSupportStorage)
 /**判断当前环境是否是移动端*/
 export const isMobile = inBrowser && "ontouchstart" in document.documentElement;
 /**判断当前环境是否支持 IntersectionObserver*/
