@@ -7,7 +7,11 @@ import { IStorage } from "./Types";
 export const formatResult = (value: string | null): any => {
     if (value === "undefined") return undefined;
     if (value === null) return null;
-    return JSON.parse(value);
+    try {
+        return JSON.parse(value);
+    } catch (e){
+        return value;
+    }
 };
 /**
  * @desc NativeStorage 实现类，继承于IStorage

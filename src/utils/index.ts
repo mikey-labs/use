@@ -16,7 +16,6 @@ export const isSupportStorage = ((w)=>{
        return false;
     }
 })(window);
-console.log(isSupportStorage)
 /**判断当前环境是否是移动端*/
 export const isMobile = inBrowser && "ontouchstart" in document.documentElement;
 /**判断当前环境是否支持 IntersectionObserver*/
