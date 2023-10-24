@@ -64,7 +64,7 @@ useEventListener 添加元素监听事件，当元素被移除时候自动移除
 ```typescript
 //定义
 export declare const useEventListener: (
-    el: Node,
+    el: Node | Window,
     event: string,
     callback: Function,
     options?: AddEventListenerOptions | boolean

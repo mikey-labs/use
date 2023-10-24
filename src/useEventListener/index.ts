@@ -9,7 +9,7 @@ import { observerTargetRemove } from "./TargetRemoveObserver";
  * @param options 事件配置项
  */
 export const useEventListener = function (
-    el: Node,
+    el: Node | Window,
     event: string,
     callback: Function,
     options?: AddEventListenerOptions | boolean

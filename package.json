@@ -1,6 +1,6 @@
 {
     "name": "@zhengxy/use",
-    "version": "0.0.7-beta.1",
+    "version": "0.0.7-beta.2",
     "description": "Composition API",
     "main": "dist/index.cjs.js",
     "module": "dist/index.esm.mjs",
@@ -44,5 +44,9 @@
         "prettier": "^2.8.4",
         "rimraf": "^4.4.1",
         "typescript": "^4.9.5"
+    },
+    "publishConfig": {
+        "access": "public",
+        "tag": "beta"
     }
 }
