@@ -5,11 +5,10 @@
         "target": "ES2015",
         "sourceMap": true,
         "outDir": "./dist",
-        "outFile": "./dist/Types.d.ts",
         "declaration": true,
         "strict": true,
         "moduleResolution": "Node",
-        "emitDeclarationOnly": true
+        "emitDeclarationOnly": true,
 
     },
     "exclude": ["node_modules"]
