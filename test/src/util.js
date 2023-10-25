@@ -10,8 +10,7 @@ import {
     isSupportInterSectionObserver,
     object2Url,
     isNumeric,
-    isDarkMode,
-    detectMobileBrowser
+    isDarkMode
 } from "../../dist/index.esm.mjs";
 console.log("日期时间戳格式化:" + formatDate(new Date().getTime(), "yyyy-MM-dd hh:mm:ss S"));
 console.log("当前是否为浏览器环境:" + inBrowser);
@@ -25,4 +24,3 @@ console.log("是否支持InterSectionObserver API:" + isSupportInterSectionObser
 console.log("将简单对象转换成url，不支持嵌套:" + object2Url({ a: 1, b: 2 }));
 console.log("是否为数字:" + isNumeric(1e4));
 console.log("是否为暗黑模式:" + isDarkMode());
-console.log("检测是否为移动端:" + detectMobileBrowser());
