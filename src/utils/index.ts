@@ -1,3 +1,5 @@
+import {detectMobileBrowser} from "./DetectMobileBrowser";
+
 /**判断当前环境是否为浏览器环境*/
 export const inBrowser = typeof window !== "undefined" && "onload" in window;
 /**判断当前环境是否支持Fetch API*/
@@ -17,7 +19,7 @@ export const isSupportStorage = ((w)=>{
     }
 })(window);
 /**判断当前环境是否是移动端*/
-export const isMobile = inBrowser && "ontouchstart" in document.documentElement;
+export const isMobile = inBrowser && detectMobileBrowser();
 /**判断当前环境是否支持 IntersectionObserver*/
 export const isSupportInterSectionObserver = inBrowser && "IntersectionObserver" in window;
 
@@ -79,3 +81,4 @@ export const isNumeric = (val: string | number): boolean => typeof val === "numb
  */
 export const isDarkMode = (): boolean =>
     inBrowser && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+export * from "./DetectMobileBrowser"

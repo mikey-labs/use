@@ -374,6 +374,10 @@ export declare const isNumeric: (val: string | number) => boolean;
  * 是否是暗黑模式
  */
 export declare const isDarkMode: () => boolean;
+/**
+* 检测是否是移动浏览器
+* */
+export declare function detectMobileBrowser(): boolean;
 ```
 
 #### useTouch
