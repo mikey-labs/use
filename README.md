@@ -68,7 +68,7 @@ export declare const useEventListener: (
     event: string,
     callback: Function,
     options?: AddEventListenerOptions | boolean
-) => void;
+) => {stop:Function};
 
 import { useEventListener } from "@zhengxy/use";
 useEventListener(
@@ -79,8 +79,9 @@ useEventListener(
     },
     { once: true }
 );
-useEventListener(HTMLElement, "click", (e) => {
+const {stop} = useEventListener(HTMLElement, "click", (e) => {
     console.log("绑定事件");
+    stop()
 });
 ```
 

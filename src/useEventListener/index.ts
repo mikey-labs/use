@@ -13,9 +13,14 @@ export const useEventListener = function (
     event: string,
     callback: Function,
     options?: AddEventListenerOptions | boolean
-) {
+):{
+    stop:Function
+} {
     bindEventListener(el, event, callback, options);
     observerTargetRemove(el, () => {
         unbindEventListener(el, event, callback, options);
     });
+    return {
+        stop:unbindEventListener.bind(null,el, event, callback, options)
+    }
 };
