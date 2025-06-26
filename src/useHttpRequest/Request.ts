@@ -12,7 +12,7 @@ function fetchCaller(url: string, options: RequestInit): Promise<any> {
             if (contentType.includes(RequestContentType.json)) return response.json();
             if (contentType.includes(RequestContentType.text) || contentType.includes(RequestContentType.html))
                 return response.text();
-            return response.blob();
+            return response;
         } else {
             throw Error(await response.text());
         }
