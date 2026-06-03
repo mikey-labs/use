@@ -1,51 +1,51 @@
 {
-    "name": "@zhengxy/use",
-    "version": "0.1.0",
-    "description": "Composition API",
-    "main": "dist/index.cjs.js",
-    "module": "dist/index.esm.mjs",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "dev": "node ./build.js -w",
-        "build": "pnpm clear && pnpm build:bundle && pnpm build:types",
-        "clear": "rimraf ./dist",
-        "build:types": "tsc -p ./tsconfig.json",
-        "build:bundle": "node ./build.js"
-    },
-    "exports": {
-        ".": {
-            "import": "./dist/index.esm.mjs",
-            "require": "./dist/index.cjs.js",
-            "default": "./dist/index.browser.js"
-        }
-    },
-    "files": [
-        "dist",
-        "README.md"
-    ],
-    "sideEffects": false,
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mikey-labs/use.git"
-    },
-    "keywords": [
-        "utils",
-        "api",
-        "tools"
-    ],
-    "author": "mikey",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/mikey-labs/use/issues"
-    },
-    "homepage": "https://github.com/mikey-labs/use#readme",
-    "devDependencies": {
-        "esbuild": "^0.17.7",
-        "prettier": "^2.8.4",
-        "rimraf": "^4.4.1",
-        "typescript": "^4.9.5"
-    },
-    "publishConfig": {
-        "access": "public"
+  "name": "@SPHTech-CQ/toolkit",
+  "version": "1.0.0",
+  "description": "toolkit for SPHTech-CQ",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "node ./build.js -w",
+    "build": "pnpm clear && pnpm build:bundle && pnpm build:types",
+    "clear": "rimraf ./dist",
+    "build:types": "tsc -p ./tsconfig.json",
+    "build:bundle": "node ./build.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.mjs",
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.browser.js"
     }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SPHTech-CQ/zaobao-cn-npm.git"
+  },
+  "keywords": [
+    "toolkit",
+    "SPHTech-CQ"
+  ],
+  "author": "zxiangyun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SPHTech-CQ/zaobao-cn-npm/issues"
+  },
+  "homepage": "https://github.com/SPHTech-CQ/zaobao-cn-npm#readme",
+  "devDependencies": {
+    "esbuild": "^0.17.7",
+    "prettier": "^2.8.4",
+    "rimraf": "^4.4.1",
+    "typescript": "^4.9.5"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
 }
+

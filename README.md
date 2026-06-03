@@ -4,13 +4,13 @@
 
 ## Features
 
--   🚀 1KB Component average size
--   🚀 Native script
--   🚀 Zero third-party dependencies
--   💪 Written in TypeScript
--   📖 Extensive documentation and demos
--   🍭 Support all project
--   🍭 Support Tree Shaking
+- 🚀 1KB Component average size
+- 🚀 Native script
+- 🚀 Zero third-party dependencies
+- 💪 Written in TypeScript
+- 📖 Extensive documentation and demos
+- 🍭 Support all project
+- 🍭 Support Tree Shaking
 
 ## Install
 
@@ -18,13 +18,13 @@ Using `npm` or `pnpm` to install
 
 ```bash
 # install latest
-npm/pnpm i @zhengxy/use;
+npm/pnpm i @SPHTech-CQ/toolkit;
 ```
 
 Using `yarn`
 
 ```bash
-yarn add @zhengxy/use;
+yarn add @SPHTech-CQ/toolkit;
 ```
 
 ## Quickstart
@@ -33,15 +33,15 @@ Using ESM
 
 ```js
 // import all Api
-import * as Tools from "@zhengxy/use";
+import * as Tools from '@SPHTech-CQ/toolkit';
 // import some Api
-import { useHttpRequest, useClickOutSide } from "@zhengxy/use";
+import { useHttpRequest, useClickOutSide } from '@SPHTech-CQ/toolkit';
 ```
 
 Using CommonJs
 
 ```js
-const Tools = require("@zhengxy/use");
+const Tools = require('@SPHTech-CQ/toolkit');
 Tools.useHttpRequest();
 ```
 
@@ -50,8 +50,8 @@ Using iife
 ```html
 <script src="pathto/dist/index.browser.js"></script>
 <script>
-    console.log(Tools);
-    Tools.useHttpRequest();
+  console.log(Tools);
+  Tools.useHttpRequest();
 </script>
 ```
 
@@ -64,24 +64,24 @@ useEventListener 添加元素监听事件，当元素被移除时候自动移除
 ```typescript
 //定义
 export declare const useEventListener: (
-    el: Node | Window,
-    event: string,
-    callback: Function,
-    options?: AddEventListenerOptions | boolean
-) => {stop:Function};
+  el: Node | Window,
+  event: string,
+  callback: Function,
+  options?: AddEventListenerOptions | boolean
+) => { stop: Function };
 
-import { useEventListener } from "@zhengxy/use";
+import { useEventListener } from '@SPHTech-CQ/toolkit';
 useEventListener(
-    HTMLElement,
-    "click",
-    () => {
-        console.log("监听一次");
-    },
-    { once: true }
+  HTMLElement,
+  'click',
+  () => {
+    console.log('监听一次');
+  },
+  { once: true }
 );
-const {stop} = useEventListener(HTMLElement, "click", (e) => {
-    console.log("绑定事件");
-    stop()
+const { stop } = useEventListener(HTMLElement, 'click', (e) => {
+  console.log('绑定事件');
+  stop();
 });
 ```
 
@@ -92,21 +92,25 @@ const {stop} = useEventListener(HTMLElement, "click", (e) => {
 ```typescript
 //定义
 export interface UseClickOutSideOptions {
-    eventName?: string;
-    //可配置是否冒泡捕获等参数
-    listenerOption?: AddEventListenerOptions | boolean;
+  eventName?: string;
+  //可配置是否冒泡捕获等参数
+  listenerOption?: AddEventListenerOptions | boolean;
 }
 export declare function useClickOutSide(
-    target: Element | null | undefined,
-    listener: EventListener,
-    options?: UseClickOutSideOptions
+  target: Element | null | undefined,
+  listener: EventListener,
+  options?: UseClickOutSideOptions
 ): void;
 
-import { useClickOutside } from "@zhengxy/use";
-useClickOutSide(HTMLElement, (event) => {
+import { useClickOutside } from '@SPHTech-CQ/toolkit';
+useClickOutSide(
+  HTMLElement,
+  (event) => {
     // console.log(event)
-    console.log("useClickOutside按钮::点击外部回调");
-},true);
+    console.log('useClickOutside按钮::点击外部回调');
+  },
+  true
+);
 ```
 
 #### useHttpRequest
@@ -125,7 +129,7 @@ declare abstract class IHttpRequest {
 }
 export declare function useHttpRequest(options: FetchConfig): IHttpRequest;
 
-import { useHttpRequest } from "@zhengxy/use";
+import { useHttpRequest } from "@SPHTech-CQ/toolkit";
 FetchConfig = {
     base:'',//默认api host
     credentials:"include" | "omit" | "same-origin", // 'default',
@@ -149,12 +153,12 @@ request.delete(url: string, data: object, config?: FetchConfig): Promise
 
 ```typescript
 //定义
-export declare function usePageVisibility(callback: (visibility: string) => void): {stop:()=>void};
+export declare function usePageVisibility(callback: (visibility: string) => void): { stop: () => void };
 
-import { usePageVisibility } from "@zhengxy/use";
-const {stop} = usePageVisibility((state) => {
-    console.log("visibilityState:", state);
-    //stop()停止监听
+import { usePageVisibility } from '@SPHTech-CQ/toolkit';
+const { stop } = usePageVisibility((state) => {
+  console.log('visibilityState:', state);
+  //stop()停止监听
 });
 ```
 
@@ -164,11 +168,13 @@ const {stop} = usePageVisibility((state) => {
 
 ```typescript
 //定义
-export declare function useWindowResize(callback: (width: number, height: number, args: IArguments) => void): {stop:()=>void};
-import { useWindowResize } from "@zhengxy/use";
-const {stop} = useWindowResize((width, height, e) => {
-    console.log(width, height, e);
-    //stop()停止监听
+export declare function useWindowResize(callback: (width: number, height: number, args: IArguments) => void): {
+  stop: () => void;
+};
+import { useWindowResize } from '@SPHTech-CQ/toolkit';
+const { stop } = useWindowResize((width, height, e) => {
+  console.log(width, height, e);
+  //stop()停止监听
 });
 ```
 
@@ -180,35 +186,35 @@ const {stop} = useWindowResize((width, height, e) => {
 //定义
 export declare function useEventDispatch(eventName: string, data: any, options?: EventOptions): void;
 export declare function useEventObserver(
-    eventName: string,
-    callback: (data: any, event: MessageEvent) => void,
-    options?: EventOptions
-): {stop:()=>void};
+  eventName: string,
+  callback: (data: any, event: MessageEvent) => void,
+  options?: EventOptions
+): { stop: () => void };
 export declare type EventOptions = {
-    target?: Window;
-    origin?: string;
+  target?: Window;
+  origin?: string;
 };
 // eventName发送的自定义事件名称，接收的eventName与发送的一致才能正常接受，data需要发送消息的对象
 // 使用useEventDispatch时，target为你要发送消息的window对象，origin为接收者的origin，如果目标窗口的domain为origin才会收到此消息，默认值"*"，所有窗口都会收到消息，注：受同源策略的限制，target和origin必须在同一域名下
 // 使用useEventObserver时，target为你要接收消息的window对象，origin为发送者的origin，如果发送者的origin为设置的origin才会收到此消息，默认值为空，接收所有为eventName的消息，返回stop方法用于停止监听
 
-import { useEventDispatch, useEventObserver } from "@zhengxy/use";
+import { useEventDispatch, useEventObserver } from '@SPHTech-CQ/toolkit';
 useEventDispatch(
-    "hello",
-    { a: "hello,你好" },
-    {
-        target: iframe.contentWindow,
-        origin: location.origin,
-    }
+  'hello',
+  { a: 'hello,你好' },
+  {
+    target: iframe.contentWindow,
+    origin: location.origin
+  }
 );
 
 // 其他iframe 或者当前页面其他地方 stop方法停止监听
-const {stop} = useEventObserver(
-    "hello",
-    (data, e) => {
-        console.log("子窗口接收消息", data);
-    },
-    { origin: location.origin }
+const { stop } = useEventObserver(
+  'hello',
+  (data, e) => {
+    console.log('子窗口接收消息', data);
+  },
+  { origin: location.origin }
 );
 ```
 
@@ -220,15 +226,17 @@ const {stop} = useEventObserver(
 //定义
 export declare function useFullScreen(target: Node): any;
 export declare function useExitFullScreen(): any;
-export declare function useFullScreenChange(callback: (isFullScreen: boolean, arg: IArguments) => void): {stop:()=>void};
+export declare function useFullScreenChange(callback: (isFullScreen: boolean, arg: IArguments) => void): {
+  stop: () => void;
+};
 
-import { useFullScreen, useExitFullScreen, useFullScreenChange } from "@zhengxy/use";
+import { useFullScreen, useExitFullScreen, useFullScreenChange } from '@SPHTech-CQ/toolkit';
 useFullScreen(HTMLElement);
 useExitFullScreen();
-const {stop} = useFullScreenChange((isFullScreen, event) => {
-    console.log(isFullScreen);
-    //停止监听
-    //stop()
+const { stop } = useFullScreenChange((isFullScreen, event) => {
+  console.log(isFullScreen);
+  //停止监听
+  //stop()
 });
 ```
 
@@ -240,10 +248,10 @@ const {stop} = useFullScreenChange((isFullScreen, event) => {
 //定义
 export declare const useCopy: (text: string) => Promise<boolean>;
 
-import { useCopy } from "@zhengxy/use";
-useCopy("复制文本").then((res) => {
-    console.log(res);
-    alert(res ? "复制成功" : "复制失败");
+import { useCopy } from '@SPHTech-CQ/toolkit';
+useCopy('复制文本').then((res) => {
+  console.log(res);
+  alert(res ? '复制成功' : '复制失败');
 });
 ```
 
@@ -253,14 +261,14 @@ useCopy("复制文本").then((res) => {
 
 ```typescript
 //使用方式：
-import { useStorage } from "@zhengxy/use";
-const Storage = useStorage({ use: "cookie" }); //use type = 'auto' | 'cookie' | 'storage'
-Storage.setSession("session", { a: 1 });
-Storage.getSession("session");
-Storage.getLocal("session");
-Storage.setLocal("session", { a: 1 });
-Storage.removeLocal("session");
-Storage.removeSession("session");
+import { useStorage } from '@SPHTech-CQ/toolkit';
+const Storage = useStorage({ use: 'cookie' }); //use type = 'auto' | 'cookie' | 'storage'
+Storage.setSession('session', { a: 1 });
+Storage.getSession('session');
+Storage.getLocal('session');
+Storage.setLocal('session', { a: 1 });
+Storage.removeLocal('session');
+Storage.removeSession('session');
 ```
 
 #### useDownload
@@ -272,31 +280,31 @@ Storage.removeSession("session");
 
 export declare function useDownload(target: string | Blob, fileName: string): Promise<boolean>;
 
-import { useDownload } from "@zhengxy/use";
+import { useDownload } from '@SPHTech-CQ/toolkit';
 //保存普通链接
-useDownload("https://www.baidu.com/img/flexible/logo/pc/result.png", "blob.txt").then((res) => {
-    console.log(res);
+useDownload('https://www.baidu.com/img/flexible/logo/pc/result.png', 'blob.txt').then((res) => {
+  console.log(res);
 });
 //canvas
 canvas.toBlob((blob) => {
-    useDownload(blob, "canvas.png").then((res) => {
-        console.log(res);
-    });
+  useDownload(blob, 'canvas.png').then((res) => {
+    console.log(res);
+  });
 });
 //结合异步,注意跨域问题
 useHttpRequest()
-    .get("https://www.baidu.com/img/flexible/logo/pc/result.png", null, { responseType: "blob" })
-    .then((blob) => {
-        console.log(blob);
-        useDownload(blob, "异步blob.png").then((res) => {
-            console.log(res);
-        });
+  .get('https://www.baidu.com/img/flexible/logo/pc/result.png', null, { responseType: 'blob' })
+  .then((blob) => {
+    console.log(blob);
+    useDownload(blob, '异步blob.png').then((res) => {
+      console.log(res);
     });
+  });
 
 //保存Blob
-const blob = new Blob(["hello world,中文"], { type: "text/plain;charset=utf-8" });
-useDownload(blob, "blob.txt").then((res) => {
-    console.log(res);
+const blob = new Blob(['hello world,中文'], { type: 'text/plain;charset=utf-8' });
+useDownload(blob, 'blob.txt').then((res) => {
+  console.log(res);
 });
 ```
 
@@ -307,27 +315,30 @@ useDownload(blob, "blob.txt").then((res) => {
 ```typescript
 //
 //定义
-export type PressTypes = "keydown" | "keyup";
+export type PressTypes = 'keydown' | 'keyup';
 export type KeyboardOptions = {
-    key: string; // 监听的字符，如ESC，Tab这些按键，值与KeyboardEvent返回的key值一致
-    type?: PressTypes; // 'keydown' | 'keyup' 监听按下还是抬起
-    caseSensitive?: boolean; //支持大小写敏感？默认不支持，大小写都能监听
-    once?: boolean; // 监听一次
-    ctrl?: boolean; // 监听 组合键 ctrl
-    shift?: boolean; // 监听 组合键 shift
-    alt?: boolean; // 监听 组合键 alt
-    meta?: boolean; // 监听 组合键 meta
+  key: string; // 监听的字符，如ESC，Tab这些按键，值与KeyboardEvent返回的key值一致
+  type?: PressTypes; // 'keydown' | 'keyup' 监听按下还是抬起
+  caseSensitive?: boolean; //支持大小写敏感？默认不支持，大小写都能监听
+  once?: boolean; // 监听一次
+  ctrl?: boolean; // 监听 组合键 ctrl
+  shift?: boolean; // 监听 组合键 shift
+  alt?: boolean; // 监听 组合键 alt
+  meta?: boolean; // 监听 组合键 meta
 };
-export declare function useKeyboard(optionsOrKey: string | KeyboardOptions, callback: (e: KeyboardEvent) => void): {stop:()=>void};
+export declare function useKeyboard(
+  optionsOrKey: string | KeyboardOptions,
+  callback: (e: KeyboardEvent) => void
+): { stop: () => void };
 
 //使用方式：
-import { useKeyboard } from "@zhengxy/use";
-const {stop} = useKeyboard("q", (event) => {
-    console.log(event);
-    // stop() 停止监听
+import { useKeyboard } from '@SPHTech-CQ/toolkit';
+const { stop } = useKeyboard('q', (event) => {
+  console.log(event);
+  // stop() 停止监听
 });
-const {stop:sp} = useKeyboard({ key: "c", ctrl: true }, (event) => {
-    console.log(event);
+const { stop: sp } = useKeyboard({ key: 'c', ctrl: true }, (event) => {
+  console.log(event);
 });
 ```
 
@@ -384,21 +395,21 @@ export declare const isDarkMode: () => boolean;
 ```typescript
 //使用方式：
 const touch = useTouch();
-const d3 = document.getElementById("d3");
-useEventListener(d3, "touchstart", (e) => {
-    touch.touchStart(e);
+const d3 = document.getElementById('d3');
+useEventListener(d3, 'touchstart', (e) => {
+  touch.touchStart(e);
 });
-useEventListener(d3, "touchmove", (e) => {
-    touch.touchMove(e);
-    const res = touch.getTouchResult();
-    d3.style.left = res.deltaX + "px";
-    d3.style.top = res.deltaY + "px";
-    console.log(res);
-    touch.preventDefault(e);
+useEventListener(d3, 'touchmove', (e) => {
+  touch.touchMove(e);
+  const res = touch.getTouchResult();
+  d3.style.left = res.deltaX + 'px';
+  d3.style.top = res.deltaY + 'px';
+  console.log(res);
+  touch.preventDefault(e);
 });
-useEventListener(d3, "touchend", (e) => {
-    touch.touchEnd(e);
-    console.log(touch.getTouchResult());
+useEventListener(d3, 'touchend', (e) => {
+  touch.touchEnd(e);
+  console.log(touch.getTouchResult());
 });
 ```
 
@@ -409,35 +420,35 @@ useEventListener(d3, "touchend", (e) => {
 ```typescript
 //定义
 export declare function useIntersectionObserver(
-    el: Element,
-    callback: IntersectionObserverCallback,
-    options: IntersectionObserverInit
+  el: Element,
+  callback: IntersectionObserverCallback,
+  options: IntersectionObserverInit
 ):
-    | {
-          isSupported: boolean;
-          stop: () => void;
-      }
-    | undefined;
+  | {
+      isSupported: boolean;
+      stop: () => void;
+    }
+  | undefined;
 
 //使用方式：
 //例子：图片懒加载
 const { isSupported, stop } = useIntersectionObserver(
-    HTMLImageElement,
-    ([{ isIntersecting }]) => {
-        console.log("是否与options root参数视口相交：", isIntersecting);
-        if (isIntersecting) {
-            setTimeout(() => {
-                //模拟加载延时时间
-                img.src = img.dataset.src;
-                stop();
-            }, 2000);
-        }
-    },
-    {
-        //参考IntersectionObserverInit对象
-        root: document,
-        threshold: 1,
+  HTMLImageElement,
+  ([{ isIntersecting }]) => {
+    console.log('是否与options root参数视口相交：', isIntersecting);
+    if (isIntersecting) {
+      setTimeout(() => {
+        //模拟加载延时时间
+        img.src = img.dataset.src;
+        stop();
+      }, 2000);
     }
+  },
+  {
+    //参考IntersectionObserverInit对象
+    root: document,
+    threshold: 1
+  }
 );
 ```
 
@@ -448,3 +459,4 @@ Support all modern browsers
 ## LICENSE
 
 Lib is [MIT](https://github.com/mikey-labs/use/blob/main/LICENSE) licensed.
+
